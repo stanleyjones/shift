@@ -33,24 +33,25 @@ define([
 
 		regions: function (mode, cc) {
 			if (!mode && !cc) {
-				var mode = 'international';
+				mode = this.app.appState.get('mode');
 				Backbone.history.navigate('regions/' + mode);
 			}
-			this.app.showRegions(mode, cc);
-			this.app.appState.set({pane: 'regions'});
-			if (cc) { this.app.appState.set({detail: 'region'}); }
+
+			this.app.appState.set({pane: 'regions', mode: mode});
+			if (cc) { this.app.appState.set({card: 'region', id: cc}); }
+			else { this.app.appState.set({card: null, id: null}); }
 		},
 
 		institutions: function (abbr) {
 			this.app.showInstitutions(abbr);
 			this.app.appState.set({pane: 'institutions'});
-			if (abbr) { this.app.appState.set({detail: 'institution'}); }
+			if (abbr) { this.app.appState.set({card: 'institution'}); }
 		},
 
 		sectors: function (abbr) {
 			this.app.showSectors(abbr);
 			this.app.appState.set({pane: 'sectors'});
-			if (abbr) { this.app.appState.set({detail: 'sector'}); }
+			if (abbr) { this.app.appState.set({card: 'sector'}); }
 		}
 	});
 

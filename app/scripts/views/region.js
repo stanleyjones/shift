@@ -12,20 +12,21 @@ define([
 	'use strict';
 
 	var RegionView = Backbone.View.extend({
-		el: '#detail',
+		el: '#card',
 
 		template: _.template(regionTemplate),
 
 		events: {
-			'click .detail-toggle': 'renderChart'
+			// 'click .toggle': 'renderChart'
 		},
 
 		initialize: function () {
 			this.viewState = new Backbone.Model({field: 'sector'});
-
 			this.viewState.on('change:size', this.renderChart, this);
 
 			this.chart = this.$('.region-chart');
+
+			this.render();
 		},
 
 		render: function () {
@@ -38,7 +39,6 @@ define([
 			var _this = this;
 
 			var	chartEl = this.chart;
-			console.log(chartEl.width());
 
 			// Setup chart
 
@@ -124,8 +124,8 @@ define([
 				bars.transition()
 					.delay(function (d, i) { return i * 10; })
 					.duration(500)
-					.attr('y', function(d) { return y(d.y0) - (h - y(d.y)); })
-					.attr('height', function(d) { return h - y(d.y); });
+					.attr('y', function(d) { return Math.max(0, y(d.y0) - (h - y(d.y))); })
+					.attr('height', function(d) { return Math.max(0, h - y(d.y)); });
 		
 				bars.exit().transition()
 					.duration(500)

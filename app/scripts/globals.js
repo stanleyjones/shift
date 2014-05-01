@@ -9,7 +9,7 @@ define('globals', function () {
 
 		API_EXPIRY: 24, // in hours
 		API_DEVELOPMENT: [
-			{mode: 'international', url: '/data/subsidies/international.json'}
+			{mode: 'international', url: '/data/intl.json'}
 			// {mode: 'national', url: '/data/subsidies/ntnl.json'}
 		],
 		API_PRODUCTION: [

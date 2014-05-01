@@ -62,6 +62,8 @@ define([
 						if (subsidy.isValid()) {
 							_this.add(subsidy);
 							subsidy.save();
+						} else {
+							console.log(subsidy.validationError);
 						}
 					});
 					
@@ -100,13 +102,13 @@ define([
 				visible: subsidy.visible,
 				amount: parseInt(subsidy.amountUSD, 10) || 0,
 				date: subsidy.date,
-				region: subsidy.regionName,
+				region: subsidy.region,
 				regionCC: subsidy.regionCC,
 				sector: subsidy.sector,
 				stage: subsidy.stage,
-				access: subsidy['access?'],
-				project: subsidy.projectName,
-				institution: subsidy.institutionName,
+				access: subsidy.access,
+				project: subsidy.project,
+				institution: subsidy.institution,
 				institutionAbbr: subsidy.institutionAbbr,
 				year: new Date(subsidy.date).getFullYear(),
 				category: subsidy.category.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'')

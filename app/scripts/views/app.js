@@ -22,21 +22,23 @@ define([
 		events: {
 			'click .left': 'prevPane',
 			'click .right': 'nextPane',
-			'click .loader': 'showMain',
-			'click .detail-close': 'closeDetail'
-			// 'click .region': 'showDetail'
+			'click .open': function () { this.appState.set('pane', 'regions'); },
+			'click .close': function () { this.appState.set({card: null, id: null}); }
 		},
 
 		initialize: function () {
 			this.appState = new Backbone.Model({
 				App: 'Initializing',
+				mode: 'international',
 				pane: null,
-				detail: null,
+				card: null,
 				id: null,
 				modal: null
 			});
 			this.appState.on('change', this.reportStatus, this);
-			this.appState.on('change:pane', this.showPane, this);
+			this.appState.on('change:pane', this.handlePane, this);
+			this.appState.on('change:card', this.handleCard, this);
+			this.appState.on('change:id', this.handleCard, this);
 			this.appState.set({App: 'Loading'});
 
 			this.router = new Router(this);
@@ -48,7 +50,7 @@ define([
 			this.header = this.$('#oilchange-header');
 			this.intro = this.$('#intro');
 			this.main = this.$('#main');
-			this.detail = this.$('#detail');
+			this.card = this.$('#card');
 
 			Subsidies.fetch();
 		},
@@ -63,13 +65,23 @@ define([
 		},
 
 		updateStatus: function (args) {
-			if (args && args.collection && args.status) { this.appState.set(args.collection, args.status); }
-
-			if (this.isReady('Regions')) { this.regionsView = new RegionsView({collection: Regions}); }
-			if (this.isReady('Institutions')) { this.institutionsView = new InstitutionsView({collection: Institutions}); }
-			// if (this.isReady('Sectors')) { this.sectorsView = new SectorsView({collection: Sectors}); }
-
-			if (this.isReady('Subsidies') && this.isReady('Regions') && this.isReady('Institutions')) {
+			if (args && args.collection && args.status) {
+				this.appState.set(args.collection, args.status);
+			}
+			if (this.isReady('Regions')) {
+				this.regionsView = new RegionsView({collection: Regions});
+			}
+			if (this.isReady('Institutions')) {
+				this.institutionsView = new InstitutionsView({collection: Institutions});
+			}
+			// if (this.isReady('Sectors')) {
+				// this.sectorsView = new SectorsView({collection: Sectors});
+			// }
+			if (
+				this.isReady('Subsidies') &&
+				this.isReady('Regions') &&
+				this.isReady('Institutions')
+			) {
 				this.appState.set({App: 'Ready'});
 				this.fire();
 			}
@@ -82,29 +94,42 @@ define([
 
 		fire: function () {
 			this.$('#loader').hide();
+			this.handlePane();
+			this.handleCard();
 		},
 
 		showIntro: function() {
 			this.introView = this.introView || new IntroView();
+			this.$('#intro').show();
 		},
 
-		showRegions: function (mode, cc) {
-			if (!this.isReady()) { this.$('#loader').show(); }
-			this.regionsView = this.regionsView || new RegionsView({collection: Regions, mode: mode});
-			this.regionsView.render();
+		handlePane: function () {
+			if (this.isReady() && this.appState.has('pane')) { this.showPane(); }
+			else if (!this.isReady()) { this.$('#loader').show(); }
+		},
 
-			if (cc) {
-				var region = Regions.findWhere({cc: cc});
-				if (region) {
-					var regionView = new RegionView({model: region});
-					regionView.render();
-					this.regionsView.highlight(cc);
-					this.showDetail('region',cc);
-				}
-			} else {
-				this.regionsView.resetGlobe();
-			}
-			this.appState.set({pane: 'regions'});
+		handleCard: function () {
+			if (this.isReady() && this.appState.has('card')) { this.showCard(); }
+			else if (this.isReady() && !this.appState.has('card')) { this.closeCard(); }
+		},
+
+		showPane: function () {
+			this.$('#intro').fadeOut();
+			var pane = this.appState.get('pane');
+			this.$('#' + pane).addClass('active').siblings().removeClass('active');
+
+			if (pane === 'regions') { this.showRegions(); }
+			if (pane === 'institutions') { this.showInstitutions(); }
+			// if (pane == 'sectors') { this.showSectors(); }
+		},
+
+		showRegions: function () {
+			var mode = this.appState.get('mode'),
+				cc = this.appState.get('id');
+			this.regionsView = this.regionsView || new RegionsView({collection: Regions, mode: mode});
+
+			if (this.appState.get('id')) { this.showRegion(); }
+			else { this.regionsView.resetGlobe(); }
 		},
 
 		showInstitutions: function (abbr) {
@@ -128,45 +153,36 @@ define([
 			}
 		},
 
-		showPane: function () {
-			var pane = this.appState.get('pane');
-			this.$('#' + pane).addClass('active').siblings().removeClass('active');
 
-			if (pane === 'regions') { this.showRegions(); }
-			if (pane === 'institutions') { this.showInstitutions(); }
-			// if (pane == 'sectors') { this.showSectors(); }
-		},
 
 		prevPane: function () {
-			// var previous = this.$('.pane.active').prev('.pane').attr('id');
-			// this.router.navigate(previous, {trigger: true});
 		},
 
 		nextPane: function () {
-			// var active = this.main.find('.pane.active').attr('id');
-			// var next = this.activePane().next('.pane').attr('id');
-			// this.router.navigate(active, {trigger: true});
-			// this.showPane(next);
 		},
 
-		showDetail: function () {
-			var detail = this.appState.get('detail'),
-				id = this.appState.get('id'); // id: cc/abbr/slug
-			this.detail.slideDown();
+		showCard: function () {
+			var card = this.appState.get('card');
+			if (card === 'region') { this.showRegion(); }
+
+			this.$('#card').addClass('open');
 			this.$('#header, .carousel-control, .carousel-caption').fadeOut();
 		},
 
-		closeDetail: function () {
-			this.appState.set({detail: null, args: null});
-			var route = this.activePane().attr('id');
-			// Backbone.history.navigate(route, {trigger: true});
-
-			this.detail.slideUp();
-			this.$('#header, .carousel-control, .carousel-caption').fadeIn();
+		showRegion: function () {
+			var cc = this.appState.get('id'),
+				region = Regions.findWhere({cc: cc});
+			if (region) {
+				var regionView = new RegionView({model: region});
+				this.regionsView.highlight(cc);
+			}
 		},
 
-		activePane: function () {
-			return this.pane || this.$('.pane.active');
+		closeCard: function () {
+			this.$('#card').removeClass('open');
+			this.$('#header, .carousel-control, .carousel-caption').fadeIn();
+			this.handlePane();
+			Backbone.history.navigate(this.appState.get('pane'), {trigger: true});
 		}
 		
 	});

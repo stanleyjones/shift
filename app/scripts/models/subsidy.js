@@ -39,14 +39,14 @@ define([
         },
 
         validate: function (attrs) {
-            if (attrs.visible !== 'TRUE') {
+            if (attrs.visible !== 'true') {
                 return "Visibility must be true.";
             }
             if (attrs.amount <= 0) {
                 return "Amount must be a positive number.";
             }
             if (attrs.year < G.START_YEAR || attrs.year > G.END_YEAR) {
-                return "Year must within start and end years.";
+                return "Year must be within start and end years.";
             }
         }
     });

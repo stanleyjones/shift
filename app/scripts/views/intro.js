@@ -15,8 +15,8 @@ define([
 		template: _.template(introTemplate),
 
 		events: {
-			'click .select-national .loader': 'loadNational',
-			'click .select-international .loader': 'loadInternational'
+			'click .select-national .open': 'loadNational',
+			'click .select-international .open': 'loadInternational'
 		},
 
 		initialize: function () {
@@ -30,7 +30,7 @@ define([
 
 		renderProgress: function (args) {
 			var loadMessage = (args && args.status) ? args.status : 'Loading';
-			this.$el.find('.loader').text(loadMessage);
+			this.$el.find('.open').text(loadMessage);
 		},
 
 		loadNational: function () {

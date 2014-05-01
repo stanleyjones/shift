@@ -23,10 +23,10 @@ define([
 		},
 
 		initialize: function (options) {
+			this.mode = options.mode || 'international';
 
 			this.listenTo(this.collection, 'reset', this.colorRegions);
-
-			this.mode = options.mode || 'international';
+			// this.listenTo(window, 'resize', this.render);
 
 			this.size = {
 				w: Math.max(640, this.$el.width()),
@@ -43,13 +43,13 @@ define([
 				.clipAngle(90)
 				.rotate(this.initial.rotate);
 			this.path = d3.geo.path().projection(this.projection);
-
 			this.m0 = null;
 			this.o0 = null;
+
+			this.render();
 		},
 
 		render: function () {
-
 			this.$el.html(this.template());
 
 			this.globe = d3.select('.globe').append('svg')
@@ -60,6 +60,8 @@ define([
 			this.renderShading();
 			this.renderGraticule();
 			this.renderRegions();
+
+			this.resetGlobe();
 
 			return this;
 		},
@@ -180,7 +182,7 @@ define([
 					_this.rotateGlobe();
 				});
 			d3.selectAll('.region').classed('active', false);
-			// this.colorRegions();
+			this.colorRegions();
 		},
 
 		zoomRegion: function (regionPath) {
@@ -230,10 +232,7 @@ define([
 		},
 
 		release: function () {
-			if (this.m0) {
-				// this.drag();
-				this.m0 = null;
-			}
+			if (this.m0) { this.m0 = null; }
 		}
 
 	});
