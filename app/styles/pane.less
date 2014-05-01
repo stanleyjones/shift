@@ -1,0 +1,42 @@
+#main {
+	position: absolute;
+	top: 0; left: 0;
+	height: 100vh;
+	width: 100vw;
+}
+.pane {
+	position: absolute;
+	height: 100vh;
+	background: linear-gradient(#666, #fff);
+
+	.pane-nav {
+		position: absolute;
+		top: 50%;
+		min-width: 8em;
+		margin-top: 4em;
+		padding: 0 1em;
+		line-height: 3;
+		border: 0;
+		border-radius: 0 0 1em 1em;
+		color: #666;
+		background: #333;
+		text-shadow: none;
+	}
+	.left .pane-nav {
+			left: 0;
+			-webkit-transform: rotate(-90deg);
+			-webkit-transform-origin: top left;
+	}
+	.right .pane-nav {
+			right: 0;
+			-webkit-transform: rotate(90deg);
+			-webkit-transform-origin: top right;
+	}
+	.carousel-caption {
+		color: #999;
+		text-shadow: none;
+		small {
+			text-transform: uppercase;
+		}
+	}
+}

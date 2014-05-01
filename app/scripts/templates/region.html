@@ -1,0 +1,39 @@
+<button class="detail-toggle">/</button>
+<button class="detail-close">&times;</button>
+
+<div class="container">
+	<h2><%= name %></h2>
+	
+	<div class="row">
+		<div class="region-chart col-md-8"></div>
+		<div class="region-legend col-md-4"></div>
+	</div>
+
+	<div class="region-table">
+		<table>
+			<thead>
+				<th>Year</th>
+				<th>Amount</th>
+				<th>Project</th>
+				<th>Institution</th>
+				<th>Sector</th>
+				<th>Stage</th>
+				<th>Access</th>
+			</thead>
+			<tbody>
+				<% _.each(subsidies, function (s) { %>
+				<tr>
+					<td><%= s.get('year') %></td>
+					<td><%= s.get('amount') %></td>
+					<td><%= s.get('project') %></td>
+					<td><%= s.get('institution') %></td>
+					<td><%= s.get('sector') %></td>
+					<td><%= s.get('stage') %></td>
+					<td><%= s.get('access') %></td>
+				</tr>
+				<% }) %>
+			</tbody>
+		</table>
+	</div>
+</div>
+
