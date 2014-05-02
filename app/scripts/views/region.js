@@ -5,10 +5,11 @@ define([
 	'underscore',
 	'backbone',
 	'd3',
+	'datatables',
 	'globals',
 	'helpers',
 	'text!templates/region.html'
-], function ($, _, Backbone, d3, G, Help, regionTemplate) {
+], function ($, _, Backbone, d3, DataTables, G, Help, regionTemplate) {
 	'use strict';
 
 	var RegionView = Backbone.View.extend({
@@ -17,15 +18,15 @@ define([
 		template: _.template(regionTemplate),
 
 		events: {
-			// 'click .toggle': 'renderChart'
+			'click .handle.toggle': 'toggleView',
+			'click .fields .btn': 'setField'
 		},
 
 		initialize: function () {
-			this.viewState = new Backbone.Model({field: 'sector'});
-			this.viewState.on('change:size', this.renderChart, this);
+			this.viewState = new Backbone.Model({view: 'chart', field: 'sector'});
+			this.viewState.on('change:field', this.render, this);
 
-			this.chart = this.$('.region-chart');
-
+			this.chart = this.$('.view-chart');
 			this.render();
 		},
 
@@ -33,26 +34,29 @@ define([
 			this.$el.html(this.template(this.model.toJSON()));
 			this.renderChart();
 			this.renderLegend();
+			this.renderTable();
 		},
 
 		renderChart: function () {
-			var _this = this;
-
-			var	chartEl = this.chart;
+			var _this = this,
+				size = {
+					h: this.$('.bars').height(),
+					w: this.$('.bars').width()
+				}
 
 			// Setup chart
 
-			var margin = 20,
-				w = this.$el.width() - margin * 3,
-				h = this.$el.height() * 0.66 - margin,
+			var margin = 30,
+				w = size.w - margin * 2,
+				h = size.h - margin,
 				field = this.viewState.get('field');
 
 			var x = d3.scale.ordinal().rangeRoundBands([0, w], 0.1),
 				y = d3.scale.linear().rangeRound([h, 0]);
 
-			d3.select('.region-chart svg').remove();
-			var chart = d3.select('.region-chart').append('svg')
-				.attr('height', h + margin * 2).attr('width', '100%');
+			d3.select('.bars svg').remove();
+			var chart = d3.select('.bars').append('svg')
+				.attr('height', size.h).attr('width', '100%');
 
 			// Organize data
 
@@ -163,7 +167,31 @@ define([
 				legend += '<li class="' + Help.slugify(field) + '">' + field + '</li>';
 			});
 
-			this.$('.region-legend').html(legend);
+			this.$('.legend').html(legend);
+			$('.fields .btn[data-field="' + field + '"]').addClass('active');
+		},
+
+		renderTable: function () {
+			this.table = $('.view-table table').DataTable({
+				scrollY: '35vh',
+				scrollCollapse: true,
+				paging: false,
+				searching: false,
+				info: false
+			});
+			this.table.columns.adjust().draw();
+		},
+
+		setField: function (ev) {
+			var field = $(ev.target).data('field');
+			this.viewState.set({field: field});
+		},
+
+		toggleView: function () {
+			var view = (this.viewState.get('view') === 'chart') ? 'table' : 'chart';
+			this.viewState.set({view: view});
+			$('.view-' + view).show().siblings('.view').hide();
+			this.table.columns.adjust().draw();
 		}
 	});
 

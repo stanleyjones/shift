@@ -1,35 +1,44 @@
-<button class="toggle">/</button>
-<button class="close">&times;</button>
+<button class="handle toggle">/</button>
+<button class="handle close">&times;</button>
 
 <div class="container">
 	<h2><%= name %></h2>
 	
-	<div class="row">
-		<div class="region-chart col-md-8"></div>
-		<div class="region-legend col-md-4"></div>
+	<div class="view view-chart row">
+		<div class="bars col-md-8"></div>
+		<div class="col-md-4">
+			<div class="fields btn-group">
+				<button type="button" class="btn btn-default" data-field="sector">Sector</button>
+				<button type="button" class="btn btn-default" data-field="stage">Stage</button>
+				<button type="button" class="btn btn-default" data-field="institution">Institution</button>
+			</div>
+			<div class="legend"></div>
+		</div>
 	</div>
 
-	<div class="region-table">
-		<table>
+	<div class="view view-table">
+		<table class="table" cellspacing="0" width="100%">
 			<thead>
-				<th>Year</th>
-				<th>Amount</th>
-				<th>Project</th>
-				<th>Institution</th>
-				<th>Sector</th>
-				<th>Stage</th>
-				<th>Access</th>
+				<tr class="row">
+					<th class="col-sm-1">Year</th>
+					<th class="col-sm-2">Amount</th>
+					<th class="col-sm-4">Project</th>
+					<th class="col-sm-2">Institution</th>
+					<th class="col-sm-1">Sector</th>
+					<th class="col-sm-1">Stage</th>
+					<th class="col-sm-1">Access</th>
+				</tr>
 			</thead>
 			<tbody>
 				<% _.each(subsidies, function (s) { %>
-				<tr>
-					<td><%= s.get('year') %></td>
-					<td><%= s.get('amount') %></td>
-					<td><%= s.get('project') %></td>
-					<td><%= s.get('institution') %></td>
-					<td><%= s.get('sector') %></td>
-					<td><%= s.get('stage') %></td>
-					<td><%= s.get('access') %></td>
+				<tr class="row">
+					<td class="col-sm-1"><%= s.get('year') %></td>
+					<td class="col-sm-2"><%= s.get('amount') %></td>
+					<td class="col-sm-4"><%= s.get('project') %></td>
+					<td class="col-sm-2"><%= s.get('institution') %></td>
+					<td class="col-sm-1"><%= s.get('sector') %></td>
+					<td class="col-sm-1"><%= s.get('stage') %></td>
+					<td class="col-sm-1"><%= s.get('access') %></td>
 				</tr>
 				<% }) %>
 			</tbody>

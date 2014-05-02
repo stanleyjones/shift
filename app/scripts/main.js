@@ -20,6 +20,10 @@ require.config({
 		bootstrap: {
 			deps: ['jquery'],
 			exports: 'Bootstrap'
+		},
+		datatables: {
+			deps: ['jquery'],
+			exports: 'DataTables'
 		}
 	},
 	paths: {
@@ -30,7 +34,8 @@ require.config({
 		localstorage: '../bower_components/Backbone.localStorage/Backbone.localStorage',
 		d3: '../bower_components/d3/d3',
 		topojson: '../bower_components/topojson/topojson',
-		bootstrap: '../bower_components/bootstrap/dist/js/bootstrap'
+		bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
+		datatables: '../bower_components/DataTables/media/js/jquery.dataTables'
 	}
 });
 

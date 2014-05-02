@@ -40,13 +40,16 @@ define([
 
         validate: function (attrs) {
             if (attrs.visible !== 'true') {
-                return "Visibility must be true.";
+                return "Subsidy must be visible.";
             }
             if (attrs.amount <= 0) {
-                return "Amount must be a positive number.";
+                return "Subsidy must have a positive amount.";
+            }
+            if (attrs.year == false) {
+                return "Subsidy must have a year.";
             }
             if (attrs.year < G.START_YEAR || attrs.year > G.END_YEAR) {
-                return "Year must be within start and end years.";
+                return "Subsidy year must be within start and end years.";
             }
         }
     });

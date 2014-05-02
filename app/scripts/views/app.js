@@ -33,7 +33,7 @@ define([
 				pane: null,
 				card: null,
 				id: null,
-				modal: null
+				project: null
 			});
 			this.appState.on('change', this.reportStatus, this);
 			this.appState.on('change:pane', this.handlePane, this);
