@@ -24,7 +24,7 @@ define([
 			'': 'intro',
 			'regions(/:mode)(/:cc)': 'regions',
 			'institutions(/:abbr)': 'institutions',
-			'sectors(/:abbr)': 'sectors'
+			'sectors(/:slug)': 'sectors'
 		},
 
 		intro: function () {
@@ -43,15 +43,13 @@ define([
 		},
 
 		institutions: function (abbr) {
-			this.app.showInstitutions(abbr);
 			this.app.appState.set({pane: 'institutions'});
-			if (abbr) { this.app.appState.set({card: 'institution'}); }
+			if (abbr) { this.app.appState.set({card: 'institution', id: abbr}); }
 		},
 
-		sectors: function (abbr) {
-			this.app.showSectors(abbr);
+		sectors: function (slug) {
 			this.app.appState.set({pane: 'sectors'});
-			if (abbr) { this.app.appState.set({card: 'sector'}); }
+			if (abbr) { this.app.appState.set({card: 'sector', id: slug}); }
 		}
 	});
 

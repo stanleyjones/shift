@@ -1,0 +1,28 @@
+<div id="project-<%= slug %>" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title"><%= name %></h4>
+		</div>
+		<div class="modal-body">
+		<% _.each(subsidies, function (s) { %>
+			<div class="row">
+				<span class="col-xs-3"><%= s.get('date') %></span>
+				<span class="col-xs-6"><b><%= s.get('mechanism') %></b> from <b><%= s.get('institution') %></b><br><small><%= s.get('sector') %> / <%= s.get('stage') %> / <%= s.get('region') %></small></span>
+				<span class="col-xs-3 text-right large"><%= s.get('amountFormatted') %></span>
+			</div>
+		<% }) %>
+		</div>
+		<div class="modal-footer">
+			<div class="row">
+				<span class="col-xs-6 col-xs-offset-3"><b>TOTAL</b></span>
+				<span class="col-xs-3 text-right large"><b><%= totalFormatted %></b></span>
+			</div>
+			<% _.each(subsidies, function (s) { %>
+			<p class="description"><%= s.get('description') %></p>
+		<% }) %>
+		</div>
+	</div>
+  </div>
+</div>

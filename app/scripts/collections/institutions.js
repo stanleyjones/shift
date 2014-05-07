@@ -26,6 +26,7 @@ define([
 				institution = new Institution({
 					name: seed.get('institution'),
 					abbr: seed.get('institutionAbbr'),
+					group: seed.get('institutionGroup'),
 					subsidies: subsidies
 				});
 			this.add(institution);

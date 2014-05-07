@@ -5,8 +5,9 @@ define([
 	'backbone',
 	'localstorage',
 	'globals',
+	'helpers',
 	'models/subsidy'
-], function (_, Backbone, Store, G, Subsidy) {
+], function (_, Backbone, Store, G, Help, Subsidy) {
 	'use strict';
 
 	var Subsidies = Backbone.Collection.extend({
@@ -15,6 +16,7 @@ define([
 		localStorage: new Store(G.APP_NAME),
 
 		initialize: function () {
+			this.comparator = 'date';
 		},
 
 		parse: function (res) {
@@ -63,7 +65,7 @@ define([
 							_this.add(subsidy);
 							subsidy.save();
 						} else {
-							console.log(subsidy.validationError);
+							// console.log(subsidy.validationError);
 						}
 					});
 					
@@ -99,19 +101,31 @@ define([
 		processIntl: function (subsidy) {
 			var newSubsidy = {
 				mode: 'international',
+
 				visible: subsidy.visible,
 				amount: parseInt(subsidy.amountUSD, 10) || 0,
+				amountFormatted: Help.monetize(subsidy.amountUSD),
 				date: subsidy.date,
+				year: new Date(subsidy.date).getFullYear(),
+				mechanism: subsidy.mechanism,
+
 				region: subsidy.region,
 				regionCC: subsidy.regionCC,
+
 				sector: subsidy.sector,
+				sectorSlug: Help.slugify(subsidy.sector),
+
+				project: subsidy.project,
+				projectSlug: Help.slugify(subsidy.project),
+				description: subsidy.projectDesc,
+
+				category: Help.slugify(subsidy.category),
 				stage: subsidy.stage,
 				access: subsidy.access,
-				project: subsidy.project,
+
 				institution: subsidy.institution,
 				institutionAbbr: subsidy.institutionAbbr,
-				year: new Date(subsidy.date).getFullYear(),
-				category: subsidy.category.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'')
+				institutionGroup: subsidy.institutionGroup
 			};
 			return new Subsidy(newSubsidy);
 		},
@@ -133,6 +147,10 @@ define([
 
 		toSector: function (slug) {
 			return this.where({sectorSlug: slug});
+		},
+
+		forProject: function (slug) {
+			return this.where({projectSlug: slug});
 		}
 
 	});

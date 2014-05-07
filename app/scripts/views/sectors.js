@@ -17,11 +17,12 @@ define([
 		},
 
 		initialize: function () {
-			console.log('[INIT]','RegionsView');
+			// console.log('[INIT]','RegionsView');
+            this.render();
 		},
 
 		render: function () {
-			console.log('[RNDR]','RegionsView');
+			// console.log('[RNDR]','RegionsView');
 			this.$el.html(this.template());
 		}
     });

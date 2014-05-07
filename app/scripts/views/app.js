@@ -7,23 +7,27 @@ define([
 	'bootstrap',
 	'routes/router',
 	'collections/subsidies',
+	'collections/projects',
 	'collections/regions',
 	'collections/institutions',
+	'collections/sectors',
 	'views/intro',
 	'views/regions',
 	'views/region',
-	'views/institutions'
-], function ($, _, Backbone, Bootstrap, Router, Subsidies, Regions, Institutions, IntroView, RegionsView, RegionView, InstitutionsView) {
+	'views/institutions',
+	'views/sectors',
+	'views/project'
+], function ($, _, Backbone, Bootstrap, Router, Subsidies, Projects, Regions, Institutions, Sectors, IntroView, RegionsView, RegionView, InstitutionsView, SectorsView, ProjectView) {
 	'use strict';
 
 	var AppView = Backbone.View.extend({
 		el: '#app',
 
 		events: {
-			'click .left': 'prevPane',
-			'click .right': 'nextPane',
-			'click .open': function () { this.appState.set('pane', 'regions'); },
-			'click .close': function () { this.appState.set({card: null, id: null}); }
+			'click .carousel-control': 'setPane',
+			'click #intro .open': function () { this.appState.set('pane', 'regions'); },
+			'click #card .close': function () { this.appState.set({card: null, id: null}); },
+			'click #card .project': 'setProject'
 		},
 
 		initialize: function () {
@@ -39,13 +43,16 @@ define([
 			this.appState.on('change:pane', this.handlePane, this);
 			this.appState.on('change:card', this.handleCard, this);
 			this.appState.on('change:id', this.handleCard, this);
+			this.appState.on('change:project', this.handleProject, this);
 			this.appState.set({App: 'Loading'});
 
 			this.router = new Router(this);
 
 			this.listenTo(Subsidies, 'change:status', this.updateStatus);
+			this.listenTo(Projects, 'change:status', this.updateStatus);
 			this.listenTo(Regions, 'change:status', this.updateStatus);
 			this.listenTo(Institutions, 'change:status', this.updateStatus);
+			this.listenTo(Sectors, 'change:status', this.updateStatus);
 
 			this.header = this.$('#oilchange-header');
 			this.intro = this.$('#intro');
@@ -54,6 +61,8 @@ define([
 
 			Subsidies.fetch();
 		},
+
+// STATUS
 
 		reportStatus: function (args) {
 			var timerStart = this.timer || new Date(),
@@ -74,13 +83,15 @@ define([
 			if (this.isReady('Institutions')) {
 				this.institutionsView = new InstitutionsView({collection: Institutions});
 			}
-			// if (this.isReady('Sectors')) {
-				// this.sectorsView = new SectorsView({collection: Sectors});
-			// }
+			if (this.isReady('Sectors')) {
+				this.sectorsView = new SectorsView({collection: Sectors});
+			}
 			if (
 				this.isReady('Subsidies') &&
+				this.isReady('Projects') &&
 				this.isReady('Regions') &&
-				this.isReady('Institutions')
+				this.isReady('Institutions') &&
+				this.isReady('Sectors')
 			) {
 				this.appState.set({App: 'Ready'});
 				this.fire();
@@ -98,10 +109,7 @@ define([
 			this.handleCard();
 		},
 
-		showIntro: function() {
-			this.introView = this.introView || new IntroView();
-			this.$('#intro').show();
-		},
+// HANDLERS
 
 		handlePane: function () {
 			if (this.isReady() && this.appState.has('pane')) { this.showPane(); }
@@ -113,6 +121,18 @@ define([
 			else if (this.isReady() && !this.appState.has('card')) { this.closeCard(); }
 		},
 
+		handleProject: function () {
+			if (this.isReady() && this.appState.has('project')) { this.showProject(); }
+		},
+
+// SHOW
+
+		showIntro: function() {
+			this.introView = this.introView || new IntroView();
+			this.$('#loader').hide();
+			this.$('#intro').show();
+		},
+
 		showPane: function () {
 			this.$('#intro').fadeOut();
 			var pane = this.appState.get('pane');
@@ -120,7 +140,7 @@ define([
 
 			if (pane === 'regions') { this.showRegions(); }
 			if (pane === 'institutions') { this.showInstitutions(); }
-			// if (pane == 'sectors') { this.showSectors(); }
+			if (pane == 'sectors') { this.showSectors(); }
 		},
 
 		showRegions: function () {
@@ -128,37 +148,45 @@ define([
 				cc = this.appState.get('id');
 			this.regionsView = this.regionsView || new RegionsView({collection: Regions, mode: mode});
 
-			if (this.appState.get('id')) { this.showRegion(); }
+			if (cc) { this.showRegion(); }
 			else { this.regionsView.resetGlobe(); }
 		},
 
-		showInstitutions: function (abbr) {
+		showInstitutions: function () {
+			var abbr = this.appState.get('id');
 			this.institutionsView = this.institutionsView || new InstitutionsView({collection: Institutions});
-			this.institutionsView.render();
 
-			if (abbr) {
-				// Nothing yet
+			if (abbr) {}
+			// this.router.navigate('institutions');
+		},
+
+		showSectors: function () {
+			var slug = this.appState.get('id');
+			this.sectorsView = this.sectorsView || new SectorsView({collection: Sectors});
+
+			if (slug) {}
+			// this.router.navigate('sectors');
+		},
+
+		setProject: function (ev) {
+			var project = $(ev.target).parents('.project').data('project');
+			this.appState.set({project: project});
+		},
+
+		showProject: function () {
+			var projectSlug = this.appState.get('project'),
+				project = Projects.findWhere({slug: projectSlug});
+			if (project) {
+				var projectView = new ProjectView({model: project});
 			}
-
-			this.appState.set({pane: 'institutions'});
+			$('#project-' + projectSlug).modal();
 		},
 
-		showSectors: function (abbr) {
-			this.sectorsView = this.sectorsView || new SectorsView();
-			this.sectorsView.$el.addClass('active');
-			this.sectorsView.render();
-
-			if (abbr) {
-				// Nothing yet
-			}
-		},
-
-
-
-		prevPane: function () {
-		},
-
-		nextPane: function () {
+		setPane: function (ev) {
+			var pane = $(ev.target).data('pane') ||
+				$(ev.target).parents('.carousel-control').data('pane');
+			// this.appState.set({pane: pane});
+			this.router.navigate(pane);
 		},
 
 		showCard: function () {

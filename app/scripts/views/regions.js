@@ -26,8 +26,6 @@ define([
 			this.mode = options.mode || 'international';
 
 			this.listenTo(this.collection, 'reset', this.colorRegions);
-			// this.listenTo(window, 'resize', this.render);
-			// $(window).on('resize', this.render);
 
 			this.size = {
 				w: Math.max(640, this.$el.width()),
