@@ -22,6 +22,7 @@ define('helpers', function () {
 			while (pattern.test(amount)) { amount = amount.replace(pattern, '$1' + ',' + '$2');	}
 			return '$' + amount;
 		}
+
 	};
 
 	return helpers;

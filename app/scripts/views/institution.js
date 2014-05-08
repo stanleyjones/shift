@@ -9,14 +9,14 @@ define([
 	'globals',
 	'helpers',
 	'charts',
-	'text!templates/sector.html'
-], function ($, _, Backbone, d3, DataTables, G, Help, Chart, sectorTemplate) {
+	'text!templates/institution.html'
+], function ($, _, Backbone, d3, DataTables, G, Help, Chart, institutionTemplate) {
 	'use strict';
 
-	var SectorView = Backbone.View.extend({
+	var InstitutionView = Backbone.View.extend({
 		el: '#card',
 
-		template: _.template(sectorTemplate),
+		template: _.template(institutionTemplate),
 
 		events: {
 			'click .handle.toggle': 'toggleView',
@@ -24,7 +24,7 @@ define([
 		},
 
 		initialize: function () {
-			this.viewState = new Backbone.Model({view: 'chart', field: 'stage'});
+			this.viewState = new Backbone.Model({view: 'chart', field: 'sector'});
 			this.viewState.on('change:field', this.render, this);
 
 			this.chart = this.$('.view-chart');
@@ -77,7 +77,9 @@ define([
 			this.viewState.set({view: view});
 			$('.view-' + view).show().siblings('.view').hide();
 			this.table.columns.adjust().draw();
-		}	});
+		}
 
-	return SectorView;
+	});
+
+	return InstitutionView;
 });

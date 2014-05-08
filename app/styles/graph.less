@@ -1,14 +1,24 @@
 .graph {
-	
+	.root {
+		opacity: 0;
+		fill: transparent;
+	}
 	.bubble {
 		stroke-width: 1;
-		fill: @gray-light;
+		// fill: @gray-light;
+		cursor: pointer;
 		&.group {
-			fill: transparent;
-			stroke: #fff;
+			fill: rgba(255,255,255,0.25);
 		}
 		&:hover {
-			fill: @brand-primary;
+			stroke: #f96;
+			stroke-width: 2;
+			stroke-opacity: 1;
 		}
+	}
+	.label {
+		fill: #fff;
+		font-weight: 200;
+		pointer-events: none;
 	}
 }

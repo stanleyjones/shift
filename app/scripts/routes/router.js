@@ -23,7 +23,7 @@ define([
 		routes: {
 			'': 'intro',
 			'regions(/:mode)(/:cc)': 'regions',
-			'institutions(/:abbr)': 'institutions',
+			'institutions(/:slug)': 'institutions',
 			'sectors(/:slug)': 'sectors'
 		},
 
@@ -42,14 +42,14 @@ define([
 			else { this.app.appState.set({card: null, id: null}); }
 		},
 
-		institutions: function (abbr) {
+		institutions: function (slug) {
 			this.app.appState.set({pane: 'institutions'});
-			if (abbr) { this.app.appState.set({card: 'institution', id: abbr}); }
+			if (slug) { this.app.appState.set({card: 'institution', id: slug}); }
 		},
 
 		sectors: function (slug) {
 			this.app.appState.set({pane: 'sectors'});
-			if (abbr) { this.app.appState.set({card: 'sector', id: slug}); }
+			if (slug) { this.app.appState.set({card: 'sector', id: slug}); }
 		}
 	});
 

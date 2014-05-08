@@ -1,0 +1,48 @@
+<button class="handle toggle">/</button>
+<button class="handle close">&times;</button>
+
+<div class="container">
+	<h2><%= name %></h2>
+	
+	<div class="view view-chart row">
+		<div class="bars col-md-8"></div>
+		<div class="col-md-4">
+			<div class="fields btn-group">
+				<button type="button" class="btn btn-default" data-field="sector">Sector</button>
+				<button type="button" class="btn btn-default" data-field="stage">Stage</button>
+				<button type="button" class="btn btn-default" data-field="region">Region</button>
+			</div>
+			<div class="legend"></div>
+		</div>
+	</div>
+
+	<div class="view view-table">
+		<table class="table" cellspacing="0" width="100%">
+			<thead>
+				<tr class="row">
+					<th class="col-sm-2 text-right">Amount</th>
+					<th class="col-sm-1 text-center">Year</th>
+					<th class="col-sm-4">Project</th>
+					<th class="col-sm-2">Region</th>
+					<th class="col-sm-1">Sector</th>
+					<th class="col-sm-1">Stage</th>
+					<th class="col-sm-1 text-center">Access</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% _.each(subsidies, function (s) { %>
+				<tr class="row project" data-project="<%= s.get('projectSlug') %>">
+					<td class="col-sm-2 text-right"><%= s.get('amountFormatted') %></td>
+					<td class="col-sm-1 text-center"><%= s.get('year') %></td>
+					<td class="col-sm-4"><%= s.get('project') %></td>
+					<td class="col-sm-2"><%= s.get('region') %></td>
+					<td class="col-sm-1"><%= s.get('sector') %></td>
+					<td class="col-sm-1"><%= s.get('stage') %></td>
+					<td class="col-sm-1 text-center"><% if (s.get('access') === 'true') { %>&#x2713;<% } %></td>
+				</tr>
+				<% }) %>
+			</tbody>
+		</table>
+	</div>
+</div>
+

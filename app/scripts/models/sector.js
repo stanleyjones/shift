@@ -15,7 +15,12 @@ define([
 		},
 
 		initialize: function () {
+			this.slugify();
 			this.calcTotal();
+		},
+
+		slugify: function () {
+			this.set({slug: Help.slugify(this.get('name'))});
 		},
 
 		calcTotal: function () {
@@ -23,6 +28,12 @@ define([
 				return memo + s.get('amount');
 			}, 0);
 			this.set({total: total, totalFormatted: Help.monetize(total)});
+		},
+
+		uniqFields: function (field) {
+			return _.uniq(_.map(this.get('subsidies'), function (sub) {
+				return sub.get(field);
+			}));
 		}
 	});
 

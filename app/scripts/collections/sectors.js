@@ -26,6 +26,7 @@ define([
 				sector = new Sector({
 					name: seed.get('sector'),
 					slug: seed.get('sectorSlug'),
+					category: seed.get('category'),
 					subsidies: subsidies
 				});
 			this.add(sector);

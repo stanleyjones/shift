@@ -15,9 +15,11 @@ define([
 	'views/regions',
 	'views/region',
 	'views/institutions',
+	'views/institution',
 	'views/sectors',
+	'views/sector',
 	'views/project'
-], function ($, _, Backbone, Bootstrap, Router, Subsidies, Projects, Regions, Institutions, Sectors, IntroView, RegionsView, RegionView, InstitutionsView, SectorsView, ProjectView) {
+], function ($, _, Backbone, Bootstrap, Router, Subsidies, Projects, Regions, Institutions, Sectors, IntroView, RegionsView, RegionView, InstitutionsView, InstitutionView, SectorsView, SectorView, ProjectView) {
 	'use strict';
 
 	var AppView = Backbone.View.extend({
@@ -125,7 +127,7 @@ define([
 			if (this.isReady() && this.appState.has('project')) { this.showProject(); }
 		},
 
-// SHOW
+// PANES
 
 		showIntro: function() {
 			this.introView = this.introView || new IntroView();
@@ -143,6 +145,12 @@ define([
 			if (pane == 'sectors') { this.showSectors(); }
 		},
 
+		setPane: function (ev) {
+			var pane = $(ev.target).data('pane') ||
+				$(ev.target).parents('.carousel-control').data('pane');
+			this.router.navigate(pane);
+		},
+
 		showRegions: function () {
 			var mode = this.appState.get('mode'),
 				cc = this.appState.get('id');
@@ -153,45 +161,28 @@ define([
 		},
 
 		showInstitutions: function () {
-			var abbr = this.appState.get('id');
+			var slug = this.appState.get('id');
 			this.institutionsView = this.institutionsView || new InstitutionsView({collection: Institutions});
 
-			if (abbr) {}
-			// this.router.navigate('institutions');
+			if (slug) { this.showInstitution(); }
+			else { this.institutionsView.resetGraph(); }
 		},
 
 		showSectors: function () {
 			var slug = this.appState.get('id');
 			this.sectorsView = this.sectorsView || new SectorsView({collection: Sectors});
 
-			if (slug) {}
-			// this.router.navigate('sectors');
+			if (slug) { this.showSector(); }
+			else { this.sectorsView.resetGraph(); }
 		},
 
-		setProject: function (ev) {
-			var project = $(ev.target).parents('.project').data('project');
-			this.appState.set({project: project});
-		},
-
-		showProject: function () {
-			var projectSlug = this.appState.get('project'),
-				project = Projects.findWhere({slug: projectSlug});
-			if (project) {
-				var projectView = new ProjectView({model: project});
-			}
-			$('#project-' + projectSlug).modal();
-		},
-
-		setPane: function (ev) {
-			var pane = $(ev.target).data('pane') ||
-				$(ev.target).parents('.carousel-control').data('pane');
-			// this.appState.set({pane: pane});
-			this.router.navigate(pane);
-		},
+// CARDS
 
 		showCard: function () {
 			var card = this.appState.get('card');
 			if (card === 'region') { this.showRegion(); }
+			if (card === 'institution') { this.showInstitution(); }
+			if (card === 'sector') { this.showSector(); }
 
 			this.$('#card').addClass('open');
 			this.$('#header, .carousel-control, .carousel-caption').fadeOut();
@@ -206,13 +197,47 @@ define([
 			}
 		},
 
+		showInstitution: function () {
+			var slug = this.appState.get('id'),
+				institution = Institutions.findWhere({slug: slug});
+			if (institution) {
+				var institutionView = new InstitutionView({model: institution});
+				this.institutionsView.highlight(slug);
+			}
+		},
+
+		showSector: function () {
+			var slug = this.appState.get('id'),
+				sector = Sectors.findWhere({slug: slug});
+			if (sector) {
+				var sectorView = new SectorView({model: sector});
+				this.sectorsView.highlight(slug);
+			}
+		},
+
 		closeCard: function () {
 			this.$('#card').removeClass('open');
 			this.$('#header, .carousel-control, .carousel-caption').fadeIn();
 			this.handlePane();
 			Backbone.history.navigate(this.appState.get('pane'), {trigger: true});
+		},
+
+// PROJECTS
+
+		setProject: function (ev) {
+			var project = $(ev.target).parents('.project').data('project');
+			this.appState.set({project: project});
+		},
+
+		showProject: function () {
+			var projectSlug = this.appState.get('project'),
+				project = Projects.findWhere({slug: projectSlug});
+			if (project) {
+				var projectView = new ProjectView({model: project});
+			}
+			$('#project-' + projectSlug).modal();
 		}
-		
+
 	});
 
 	return AppView;
