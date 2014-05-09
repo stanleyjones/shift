@@ -36,6 +36,11 @@
 		height: 40vh;
 		.bars {
 			height: 100%;
+			.stack {
+				stroke: #fff;
+				stroke-width: 1px;
+				stroke-opacity: 0.5;
+			}
 			.axis {
 				fill: none;
 				stroke: #999;
@@ -67,14 +72,15 @@
 					width: .8em;
 					border-radius: 50%;
 				}
+				&:hover:before {
+					background-color: @brand-primary;
+				}
 			}
 		}
 	}
 
 	.view-table {
 		display: none;
-		// position: relative;
-		// width: auto;		
 		height: 35vh;
 		.table {
 			margin-bottom: 0;

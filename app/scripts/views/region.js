@@ -20,7 +20,9 @@ define([
 
 		events: {
 			'click .handle.toggle': 'toggleView',
-			'click .fields .btn': 'setField'
+			'click .fields .btn': 'setField',
+			'mouseenter .legend li': 'highlight',
+			'mouseleave .legend li': 'unhighlight'
 		},
 
 		initialize: function () {
@@ -70,6 +72,15 @@ define([
 		setField: function (ev) {
 			var field = $(ev.target).data('field');
 			this.viewState.set({field: field});
+		},
+
+		highlight: function (ev) {
+			var field = $(ev.target).attr('class');
+			d3.select('.stack.' + field).classed('highlight', true);
+		},
+
+		unhighlight: function (ev) {
+			d3.selectAll('.stack').classed('highlight', false);
 		},
 
 		toggleView: function () {

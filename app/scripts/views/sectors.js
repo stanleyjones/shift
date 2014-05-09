@@ -61,12 +61,25 @@ define([
 				.size([this.radius, this.radius])
 				.padding(2)
 				.nodes(grouped);
+
+			// this.graph.append('defs').append('pattern')
+			// 	.attr('id', 'dftIcon')
+			// 		.attr('x', 0)
+			// 		.attr('y', 0)
+			// 		.attr('width', function (d) { return 100; })
+			// 		.attr('height', function (d) { return 100; })
+			// 	.append('image')
+			// 		.attr('xlink:href', '/images/sectors/default.svg')
+			// 		.attr('x', 0)
+			// 		.attr('y', 0)
+			// 		.attr('width', function (d) { return 100; })
+			// 		.attr('height', function (d) { return 100; });
 		},
 
 		renderGraph: function () {
 			var _this = this;
 
-			var bubbles = this.graph.selectAll('circle')
+			var bubbles = this.graph.selectAll('.bubble')
 				.data(this.nodes)
 				.enter().append('circle')
 					.attr('id', function (d) { return d.slug; })
@@ -76,7 +89,7 @@ define([
 					.attr('r', 0)
 					.on('click', function (d) { _this.zoomSector(d); });
 
-			var labels = this.graph.selectAll('text')
+			var labels = this.graph.selectAll('.label')
 				.data(this.nodes)
 				.enter().append('text')
 					.attr('class', function (d) { return d.parent ? (d.children ? 'label group' : 'label') : 'root'; })
@@ -87,12 +100,21 @@ define([
 					.style('opacity', 0)
 					.style('font-size', '0')
 					.text(function (d) { return d.abbr || d.name; });
+
+			// var icons = this.graph.selectAll('.icon')
+			// 	.data(this.nodes)
+			// 	.enter().append('circle')
+			// 		.attr('class', 'icon')
+			// 		.attr('cx', function (d) { return _this.size.w / 2; })
+			// 		.attr('cy', function (d) { return _this.size.h / 2; })
+			// 		.attr('r', 0)
+			// 		.style('fill', 'url(#dftIcon)');
 		},
 
 		resetGraph: function () {
 			var resetting = this.graph.transition().duration(1000);
 
-			resetting.selectAll('circle')
+			resetting.selectAll('.bubble')
 				.delay(function (d, i) { return i * 25; })
 				.attr('cx', function (d) { return d.x; })
 				.attr('cy', function (d) { return d.y; })
@@ -104,12 +126,18 @@ define([
 					return d.ratio ? color(d.ratio) : '';
 				});
 
-			resetting.selectAll('text')
+			resetting.selectAll('.label')
 				.delay(function (d, i) { return i * 25; })
 				.attr('x', function (d) { return d.x; })
 				.attr('y', function (d) { return d.children ? d.y - d.r : d.y; })
 				.style('font-size', function (d) { return d.children ? '1em' : (2 * d.r / (d.abbr ? d.abbr.length : d.name.length)); })
 				.style('opacity', function (d) { return d.r > 15 ? 1 : 0; });
+
+			// resetting.selectAll('.icon')
+			// 	.delay(function (d, i) { return i * 25; })
+			// 	.attr('cx', function (d) { return d.x; })
+			// 	.attr('cy', function (d) { return d.y; })
+			// 	.attr('r', function (d) { return d.r / 2; });
 		},
 
 		zoomSector: function (d) {
