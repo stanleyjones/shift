@@ -4,15 +4,19 @@ var request = require('request'),
 	api_query = " WHERE visible LIKE 'true'",
 	api_key = '&key=AIzaSyAxIxiJR_hGp8eoCsadSvloPYwbEaaGYDo',
 	intl_doc_id = '11LbrREUUc9xrYjsuU0_nFiVMmiQdKUi6TRqL5aXJ',
-	ntnl_doci_id = '{{NTNL_TABLE_ID}}',
+	ntnl_doc_id = '1k52U4eIocmwCSqKWLih2cpZMcpk4Q0x4ifAeCOD8',
 	data_dir = 'app/data/';
 
 console.log('Downloading international subsidies...');
-request(api_base + intl_doc_id + api_query + api_key)
+request(api_base + intl_doc_id + api_query + api_key, status)
 	.pipe(fs.createWriteStream(data_dir + 'intl.json'));
 
-/*
+
 console.log('Downloading national subsidies...');
-request(api_base + intl_doc_id + api_key)
+request(api_base + ntnl_doc_id + api_key, status)
 	.pipe(fs.createWriteStream(data_dir + 'ntnl.json'));
-*/
+
+function status (err, msg, res) {
+	if (!err) { console.log('Done.'); }
+	else { console.log(err.msg); }
+}

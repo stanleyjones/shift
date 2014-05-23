@@ -25,8 +25,12 @@ define([
 			'mouseleave .legend li': 'unhighlight'
 		},
 
-		initialize: function () {
-			this.viewState = new Backbone.Model({view: 'chart', field: 'sector'});
+		initialize: function (options) {
+			this.viewState = new Backbone.Model({
+				view: 'chart',
+				field: 'sector',
+				mode: (options && options.mode) ? options.mode : 'international'
+			});
 			this.viewState.on('change:field', this.render, this);
 
 			this.chart = this.$('.view-chart');
@@ -34,7 +38,7 @@ define([
 		},
 
 		render: function () {
-			this.$el.html(this.template(this.model.toJSON()));
+			this.$el.html(this.template(_.extend(this.model.toJSON(), {mode: this.viewState.get('mode')})));
 			this.renderChart();
 			this.renderLegend();
 			this.renderTable();
@@ -47,7 +51,8 @@ define([
 
 		renderLegend: function () {
 			var field = this.viewState.get('field'),
-				legendFields = this.model.uniqFields(field);
+				mode = this.viewState.get('mode'),
+				legendFields = this.model.uniqFields(field, mode);
 
 			var legend = '';
 			_.each(legendFields, function (field) {

@@ -1,0 +1,21 @@
+#footer {
+	position: absolute;
+	bottom: 0; left: 0;
+	width: 100%;
+	padding: .5em 1em;
+	background: @gray-light;
+	a {
+		color: white;
+		font-size: @font-size-small;
+		font-weight: 200;
+		text-decoration: none;
+		&:after {
+			content: '•';
+			color: @gray;
+			margin: 0 .5em;
+		}
+		&:last-child:after {
+			content: '';
+		}
+	}
+}

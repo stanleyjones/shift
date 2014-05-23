@@ -23,7 +23,7 @@ define([
 			this.trigger('change:status', {collection: 'Subsidies', status: 'Loading'});
 			if (!res.length || this.isExpired()) {
 				this.trigger('change:status', {collection: 'Subsidies', status: 'Updating'});
-				this.fetchAPI();
+				this.fetchCache();
 			} else {
 				this.trigger('change:status', {collection: 'Subsidies', status: 'Ready'});
 				return this.reset(res);
@@ -31,7 +31,7 @@ define([
 		},	
 
 		setExpiry: function () {
-			var expires = new Date().getTime() + 1000 * 360 * G.API_EXPIRY;
+			var expires = new Date().getTime() + 1000 * 360 * G.EXPIRY;
 			localStorage.setItem(G.APP_NAME + '-expires', expires);
 		},
 
@@ -46,38 +46,49 @@ define([
 			while (m = _.first(this.models)) { m.destroy(); }
 		},
 
-		fetchAPI: function () {
-			var srcs = G.PRODUCTION ? G.API_PRODUCTION : G.API_DEVELOPMENT,
-				_this = this;
+		fetchCache: function () {
+			var _this = this,
+				cache = {};
+
+			_this.trigger('change:status', {collection: 'Subsidies', status: 'Retrieving'});
+
+			var promises = _.map(G.DATACACHES, function (src) {
+				return $.getJSON(src.url).done( function (json) { cache[src.mode] = json; });
+			});
 
 			this.emptyLocalStorage();
 
-			_.each(srcs, function (src) {
-				$.getJSON(src.url)
-				.done(function (json) {
-					_this.trigger('change:status', {collection: 'Subsidies', status: 'Parsing'});
+			$.when.apply(null, promises).then(function () {
+
+				_this.trigger('change:status', {collection: 'Subsidies', status: 'Processing'});
+
+				_.each(cache, function (json, mode) {
+
+					// Parse Google's weird JSON into a better format
 					var parsedJSON = _this.parseJSON(json);
 
-					_this.trigger('change:status', {collection: 'Subsidies', status: 'Processing'});
+					// Process JSON into Subsidies
 					_.each(parsedJSON, function (raw, index) {
-						var subsidy = _this.process(raw, src.mode);
-						if (subsidy.isValid()) {
-							_this.add(subsidy);
-							subsidy.save();
-						} else {
-							// console.log(subsidy.validationError);
-						}
+						var subsidies = _this.process(raw, mode);
+						if (!Array.isArray(subsidies)) { subsidies = new Array(subsidies); }
+						_.each(subsidies, function (subsidy) {
+							if (subsidy.isValid()) {
+								_this.add(subsidy);
+								subsidy.save();
+							} else {
+								// console.log(subsidy.validationError);
+							}
+						});
 					});
-					
-					_this.trigger('change:status', {collection: 'Subsidies', status: 'Ready'});
-					_this.reset(_this.models);
-				})
-				.fail(function (request, status, error) {
-					_this.trigger('change:status', {collection: 'Subsidies', status: 'Failed'});
-					console.log('[FAIL]', error.message);
+
 				});
+				_this.trigger('change:status', {collection: 'Subsidies', status: 'Ready'});
+				_this.reset(_this.models);
+				_this.setExpiry();
+			})
+			.fail(function (req, status, err) {
+				_this.trigger('change:status', {collection: 'Subsidies', status: 'Failed: ' + err.message});
 			});
-			this.setExpiry();
 		},
 
 		parseJSON: function (json) {
@@ -131,10 +142,34 @@ define([
 		},
 
 		processNtnl: function (subsidy) {
-			subsidy.mode = 'national';
-			subsidy.regionName = subsidy.project.country;
-			subsidy.regionCC = subsidy.project.cc;
-			return new Subsidy(subsidy);
+			var subsidies = [];
+			for (var year = G.START_YEAR; year < G.END_YEAR; year++) {
+				var newSubsidy = {
+					mode: 'national',
+					visible: 'true',
+					amount: parseInt(1000000 * subsidy['amount' + year] * subsidy['XR' + year], 10) || 0,
+					amountFormatted: Help.monetize(1000000 * subsidy['amount' + year] * subsidy['XR' + year]),
+					year: year,
+
+					region: subsidy.region,
+					regionCC: subsidy.regionCC,
+
+					sector: subsidy.sector,
+					sectorSlug: Help.slugify(subsidy.sector),
+
+					project: subsidy.project,
+					projectSlug: Help.slugify(subsidy.project),
+					description: subsidy.notes,
+
+					category: 'fossil-fuel',
+					stage: subsidy.stage,
+					access: false,
+
+					jurisdiction: subsidy.jurisdiction
+				};
+				subsidies.push(new Subsidy(newSubsidy));
+			}
+			return subsidies;
 		},
 
 		inRegion: function (cc) {

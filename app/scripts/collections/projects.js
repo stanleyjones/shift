@@ -17,8 +17,7 @@ define([
 
 		resetAll: function () {
 			this.trigger('change:status', {collection: 'Projects', status: 'Resetting'});
-			var projectSlugs = _.uniq(Subsidies.pluck('projectSlug'), false);
-			this.addAll(projectSlugs);
+			this.addAll(_.uniq(Subsidies.pluck('projectSlug')));
 		},
 
 		addOne: function (slug, subsidies) {

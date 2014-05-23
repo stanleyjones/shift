@@ -12,6 +12,7 @@ define([
 	'collections/institutions',
 	'collections/sectors',
 	'views/intro',
+	'views/static',
 	'views/regions',
 	'views/region',
 	'views/institutions',
@@ -19,7 +20,7 @@ define([
 	'views/sectors',
 	'views/sector',
 	'views/project'
-], function ($, _, Backbone, Bootstrap, Router, Subsidies, Projects, Regions, Institutions, Sectors, IntroView, RegionsView, RegionView, InstitutionsView, InstitutionView, SectorsView, SectorView, ProjectView) {
+], function ($, _, Backbone, Bootstrap, Router, Subsidies, Projects, Regions, Institutions, Sectors, IntroView, StaticView, RegionsView, RegionView, InstitutionsView, InstitutionView, SectorsView, SectorView, ProjectView) {
 	'use strict';
 
 	var AppView = Backbone.View.extend({
@@ -29,7 +30,8 @@ define([
 			'click .carousel-control': 'setPane',
 			'click #intro .open': function () { this.appState.set('pane', 'regions'); },
 			'click #card .close': function () { this.appState.set({card: null, id: null}); },
-			'click #card .project': 'setProject'
+			'click #card .project': 'setProject',
+			'click #static .close': 'closeStatic'
 		},
 
 		initialize: function () {
@@ -80,13 +82,13 @@ define([
 				this.appState.set(args.collection, args.status);
 			}
 			if (this.isReady('Regions')) {
-				this.regionsView = new RegionsView({collection: Regions});
+				this.regionsView = this.regionsView || new RegionsView({collection: Regions});
 			}
 			if (this.isReady('Institutions')) {
-				this.institutionsView = new InstitutionsView({collection: Institutions});
+				this.institutionsView = this.institutionsView || new InstitutionsView({collection: Institutions});
 			}
 			if (this.isReady('Sectors')) {
-				this.sectorsView = new SectorsView({collection: Sectors});
+				this.sectorsView = this.sectorsView || new SectorsView({collection: Sectors});
 			}
 			if (
 				this.isReady('Subsidies') &&
@@ -135,6 +137,15 @@ define([
 			this.$('#intro').show();
 		},
 
+		showStatic: function(page) {
+			this.staticView = new StaticView({page: page});
+			this.$('#static').slideDown();
+		},
+
+		closeStatic: function() {
+			this.$('#static').slideUp();
+		},
+
 		showPane: function () {
 			this.$('#intro').fadeOut();
 			var pane = this.appState.get('pane');
@@ -142,7 +153,7 @@ define([
 
 			if (pane === 'regions') { this.showRegions(); }
 			if (pane === 'institutions') { this.showInstitutions(); }
-			if (pane == 'sectors') { this.showSectors(); }
+			if (pane === 'sectors') { this.showSectors(); }
 		},
 
 		setPane: function (ev) {
@@ -154,7 +165,7 @@ define([
 		showRegions: function () {
 			var mode = this.appState.get('mode'),
 				cc = this.appState.get('id');
-			this.regionsView = this.regionsView || new RegionsView({collection: Regions, mode: mode});
+				this.regionsView.viewState.set({mode: mode});
 
 			if (cc) { this.showRegion(); }
 			else { this.regionsView.resetGlobe(); }
@@ -162,7 +173,6 @@ define([
 
 		showInstitutions: function () {
 			var slug = this.appState.get('id');
-			this.institutionsView = this.institutionsView || new InstitutionsView({collection: Institutions});
 
 			if (slug) { this.showInstitution(); }
 			else { this.institutionsView.resetGraph(); }
@@ -170,7 +180,6 @@ define([
 
 		showSectors: function () {
 			var slug = this.appState.get('id');
-			this.sectorsView = this.sectorsView || new SectorsView({collection: Sectors});
 
 			if (slug) { this.showSector(); }
 			else { this.sectorsView.resetGraph(); }
@@ -190,9 +199,10 @@ define([
 
 		showRegion: function () {
 			var cc = this.appState.get('id'),
+				mode = this.appState.get('mode'),
 				region = Regions.findWhere({cc: cc});
 			if (region) {
-				var regionView = new RegionView({model: region});
+				var regionView = new RegionView({model: region, mode: mode});
 				this.regionsView.highlight(cc);
 			}
 		},

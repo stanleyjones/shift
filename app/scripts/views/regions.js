@@ -22,10 +22,10 @@ define([
 			'mouseup': 'release'
 		},
 
-		initialize: function (options) {
-			this.mode = options.mode || 'international';
+		initialize: function () {
+			this.viewState = new Backbone.Model({mode: null});
 
-			this.listenTo(this.collection, 'reset', this.colorRegions);
+			this.listenTo(this.viewState, 'change:mode', this.render);
 
 			this.size = {
 				w: Math.max(640, this.$el.width()),
@@ -61,6 +61,7 @@ define([
 			this.renderRegions();
 
 			this.resetGlobe();
+			this.colorRegions();
 
 			return this;
 		},
@@ -119,19 +120,36 @@ define([
 		},
 
 		colorRegions: function () {
-			var _this = this;
+			var _this = this,
+				mode = this.viewState.get('mode');
 			var regions = this.globe.selectAll('.region');
-			regions.classed('disabled',true);
-			regions.filter(function (d) { return _this.collection.findWhere({cc: d.id}); })
-				.classed('disabled',false)
+			regions.classed('disabled', true);
+			regions.filter(function (d) {
+					var region = _this.collection.findWhere({cc: d.id});
+					return region ? region.get(mode) : false;
+				})
+				.classed('disabled', false)
 				.transition().duration(500).delay(function (d, i) { return i * 10; })
 				.style('fill', function (d) {
-					var region = _this.collection.findWhere({cc: d.id}),
-						color = d3.scale.linear()
-							.domain([-1, 0 ,1])
-							.range(['#333', '#ccc', '#3f3']);
-					return color(region.get('ratio'));
+					return _this.colorRegion(_this.collection.findWhere({cc: d.id}));
 				});
+		},
+
+		colorRegion: function (region) {
+			var color, value;			
+			if (this.viewState.get('mode') === 'international') {
+				color = d3.scale.linear()
+					.domain([-1, 0, 1])
+					.range(['#333', '#ccc', '#3f3']);
+				value = region.get('ratio');
+			}
+			if (this.viewState.get('mode') === 'national') {
+				color = d3.scale.pow().exponent(0.5)
+					.domain([this.collection.range.min, this.collection.range.max])
+					.range(['#cc9', '#333']);
+				value = region.get('total');
+			}
+			return color(value);
 		},
 
 		rotateGlobe: function (command) {
@@ -181,23 +199,24 @@ define([
 					_this.rotateGlobe();
 				});
 			d3.selectAll('.region').classed('active', false);
-			this.colorRegions();
+			// this.colorRegions();
 		},
 
 		zoomRegion: function (regionPath) {
-			var region = this.collection.findWhere({cc: regionPath.id}),
-				_this = this;
-			if (region) {
-				Backbone.history.navigate('regions/' + this.mode + '/' + region.get('cc'), {trigger: true});
+			var _this = this,
+				mode = this.viewState.get('mode'),
+				region = this.collection.findWhere({cc: regionPath.id});
+			if (region && region.get(mode)) {
+				Backbone.history.navigate('regions/' + mode + '/' + region.get('cc'), {trigger: true});
 
 				d3.selectAll('.region').classed('active', false);
-				d3.select('.region'+'#'+regionPath.id).classed('active', true);
+				d3.select('.region#' + regionPath.id).classed('active', true);
 				this.rotateGlobe('stop');
 
 				d3.transition().duration(1000)
 					.tween('rotate',function() {
 						var p = d3.geo.centroid(regionPath),
-						r = d3.interpolate(_this.projection.rotate(), [-p[0],-p[1]+15]),
+						r = d3.interpolate(_this.projection.rotate(), [-p[0], -p[1] + 15]),
 						z = d3.interpolate(_this.projection.scale(), _this.size.h);
 					return function(t) {
 						_this.projection.rotate(r(t));

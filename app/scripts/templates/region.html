@@ -10,7 +10,7 @@
 			<div class="fields btn-group">
 				<button type="button" class="btn btn-default" data-field="sector">Sector</button>
 				<button type="button" class="btn btn-default" data-field="stage">Stage</button>
-				<button type="button" class="btn btn-default" data-field="institution">Institution</button>
+				<% if (mode === 'international') { %><button type="button" class="btn btn-default" data-field="institution">Institution</button><% } %>
 			</div>
 			<div class="legend"></div>
 		</div>
@@ -20,6 +20,7 @@
 		<table class="table" cellspacing="0" width="100%">
 			<thead>
 				<tr class="row">
+				<% if (mode === 'international') { %>
 					<th class="col-sm-2 text-right">Amount</th>
 					<th class="col-sm-1 text-center">Year</th>
 					<th class="col-sm-4">Project</th>
@@ -27,10 +28,20 @@
 					<th class="col-sm-1">Sector</th>
 					<th class="col-sm-1">Stage</th>
 					<th class="col-sm-1 text-center">Access</th>
+				<% } %>
+				<% if (mode === 'national') { %>
+					<th class="col-sm-2 text-right">Amount</th>
+					<th class="col-sm-1 text-center">Year</th>
+					<th class="col-sm-5">Project</th>
+					<th class="col-sm-2">Jurisdiction</th>
+					<th class="col-sm-1">Sector</th>
+					<th class="col-sm-1">Stage</th>
+				<% } %>
 				</tr>
 			</thead>
 			<tbody>
-				<% _.each(subsidies, function (s) { %>
+				<% _.each(subsidies, function (s) { if (s.get('mode') === mode) { %>
+				<% if (mode === 'international') { %>
 				<tr class="row project" data-project="<%= s.get('projectSlug') %>">
 					<td class="col-sm-2 text-right"><%= s.get('amountFormatted') %></td>
 					<td class="col-sm-1 text-center"><%= s.get('year') %></td>
@@ -40,7 +51,17 @@
 					<td class="col-sm-1"><%= s.get('stage') %></td>
 					<td class="col-sm-1 text-center"><% if (s.get('access') === 'true') { %>&#x2713;<% } %></td>
 				</tr>
-				<% }) %>
+				<% } %>
+				<% if (mode === 'national') { %>
+				<tr class="row project">
+					<td class="col-sm-2 text-right"><%= s.get('amountFormatted') %></td>
+					<td class="col-sm-1 text-center"><%= s.get('year') %></td>
+					<td class="col-sm-5"><%= s.get('project') %></td>
+					<td class="col-sm-2"><%= s.get('jurisdiction') %></td>
+					<td class="col-sm-1"><%= s.get('sector') %></td>
+					<td class="col-sm-1"><%= s.get('stage') %></td>
+				</tr>
+				<% }}}) %>
 			</tbody>
 		</table>
 	</div>

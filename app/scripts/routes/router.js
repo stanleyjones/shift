@@ -24,12 +24,16 @@ define([
 			'': 'intro',
 			'regions(/:mode)(/:cc)': 'regions',
 			'institutions(/:slug)': 'institutions',
-			'sectors(/:slug)': 'sectors'
+			'sectors(/:slug)': 'sectors',
+			'about': 'about',
+			'methodology': 'methodology',
+			'exploration': 'exploration',
 		},
 
-		intro: function () {
-			this.app.showIntro();
-		},
+		intro: function () { this.app.showIntro(); },
+		about: function () { this.app.showStatic('about'); },
+		methodology: function () { this.app.showStatic('methodology'); },
+		exploration: function () { this.app.showStatic('exploration'); },
 
 		regions: function (mode, cc) {
 			if (!mode && !cc) {

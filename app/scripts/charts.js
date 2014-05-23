@@ -22,7 +22,8 @@ define([
 			var margin = 30,
 				w = size.w - margin * 2,
 				h = size.h - margin,
-				field = _this.viewState.get('field');
+				field = _this.viewState.get('field'),
+				mode = _this.viewState.get('mode');
 
 			var x = d3.scale.ordinal().rangeRoundBands([0, w], 0.1),
 				y = d3.scale.linear().rangeRound([h, 0]);
@@ -38,7 +39,7 @@ define([
 
 			// 2. Get unique fields (e.g. sector, stage, institution)
 
-			var uniqFields = _this.model.uniqFields(field);
+			var uniqFields = _this.model.uniqFields(field, mode);
 
 			// 3. Remap to D3's preferred format
 
