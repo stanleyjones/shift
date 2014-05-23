@@ -3,7 +3,7 @@ var request = require('request'),
 	api_base = 'https://www.googleapis.com/fusiontables/v1/query?sql=SELECT * FROM ',
 	api_query = " WHERE visible LIKE 'true'",
 	api_key = '&key=AIzaSyAxIxiJR_hGp8eoCsadSvloPYwbEaaGYDo',
-	intl_doc_id = '11LbrREUUc9xrYjsuU0_nFiVMmiQdKUi6TRqL5aXJ',
+	intl_doc_id = '1j5id7wwoBPUV8timpBggyxCNaY2wNdyP8V9EZ91j',
 	ntnl_doc_id = '1k52U4eIocmwCSqKWLih2cpZMcpk4Q0x4ifAeCOD8',
 	data_dir = 'app/data/';
 
