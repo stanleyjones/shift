@@ -31,7 +31,19 @@
 			right: 3.5em;
 		}
 	}
-
+	.csv-link {
+		position: relative;
+		top: -.5em;
+		font-size: @font-size-small;
+		color: @brand-primary;
+		background: white;
+		border: 2px solid @brand-primary;
+		&:hover {
+			color: white;
+			background: @brand-primary;
+			cursor: pointer;
+		}
+	}
 	.view-chart {
 		height: 40vh;
 		.bars {
@@ -60,20 +72,30 @@
 			overflow-y: scroll;
 			list-style: none;
 			li {
-				margin-bottom: 1px;
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				overflow: hidden;
+				padding: .25em .35em;
+				height: 2em;
 				&:before {
 					display: inline-block;
 					margin-right: .5em;
 					content: '';
-					height: .8em;
-					width: .8em;
+					height: 1.5em;
+					width: 1.5em;
 					border-radius: 50%;
 				}
-				&:hover:before {
-					background-color: @brand-primary;
+				&:hover {
+					color: white;
+					background-color: #666;
+					border-radius: 1em;
+					&:before {
+						background-color: @brand-primary;
+					}
+				}
+				span {
+					position: relative;
+					top: -.35em;
 				}
 			}
 		}
@@ -85,7 +107,8 @@
 		.table {
 			margin-bottom: 0;
 			.row:hover {
-				background: fade(@brand-primary, 25%);
+				color: white;
+				background-color: #666;
 				cursor: pointer;
 			}
 		}

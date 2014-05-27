@@ -21,6 +21,34 @@ define('helpers', function () {
 				pattern = /(\d+)(\d{3})/;
 			while (pattern.test(amount)) { amount = amount.replace(pattern, '$1' + ',' + '$2');	}
 			return '$' + amount;
+		},
+
+		toCSV: function (json) {
+			var array = json; //typeof json !== 'object' ? JSON.parse(json) : json;
+
+			var CSV = '';
+			var line = '';
+
+			// Headers
+			var head = array[0];
+			for (var index in array[0]) {
+				var value = index + "";
+				line += '"' + value.replace(/"/g, '""') + '",';
+			}
+			line = line.slice(0, -1);
+			CSV += line + '\r\n';
+
+			// Rows
+			for (var i = 0; i < array.length; i++) {
+				var line = '';
+				for (var index in array[i]) {
+					var value = array[i][index] + "";
+					line += '"' + value.replace(/"/g, '""') + '",';
+				}
+				line = line.slice(0, -1);
+				CSV += line + '\r\n';
+			}
+			return CSV;
 		}
 
 	};

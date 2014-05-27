@@ -133,6 +133,7 @@ define([
 				category: Help.slugify(subsidy.category),
 				stage: subsidy.stage,
 				access: subsidy.access,
+				kind: subsidy.kind,
 
 				institution: subsidy.institution,
 				institutionAbbr: subsidy.institutionAbbr,

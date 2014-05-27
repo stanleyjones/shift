@@ -1,43 +1,48 @@
 // CATEGORIES
 
-.fossil-fuel			{ fill: #333; }
-.clean 					{ fill: #3f3; }
-.other					{ fill: #ccc; }
+.fossil-fuel			{ fill: #333; color: #999; background-color: #333; }
+.clean 					{ fill: #3f3; color: #060; background-color: #3f3; }
+.other					{ fill: #ccc; color: #666; background-color: #ccc; }
 
 // SECTORS
 
 .bioenergy,
 .biofuels,
 .biomass				{ fill: #3f3; &:before { background-color: #3f3; } }
-.charcoal				{ fill: #333; &:before { background-color: #333; } }
-.coal					{ fill: #333; &:before { background-color: #333; } }
-.coal-bed-methane		{ fill: #333; &:before { background-color: #333; } }
-.cooking-fuels			{ fill: #333; &:before { background-color: #333; } }
-.efficiency				{ fill: #3f3; &:before { background-color: #3f3; } }
-.gas-flaring-reduction	{ fill: #333; &:before { background-color: #333; } }
-.geothermal				{ fill: #3f3; &:before { background-color: #3f3; } }
-.hydro-large			{ fill: #333; &:before { background-color: #333; } }
-.hydro-small			{ fill: #3f3; &:before { background-color: #3f3; } }
-.incineration			{ fill: #333; &:before { background-color: #333; } }
-.gas					{ fill: #333; &:before { background-color: #333; } }
+.efficiency				{ fill: #3f4; &:before { background-color: #3f4; } }
+.geothermal				{ fill: #3f5; &:before { background-color: #3f5; } }
+.hydro-small			{ fill: #4f3; &:before { background-color: #4f3; } }
+.renewables				{ fill: #4f4; &:before { background-color: #4f4; } }
+.solar					{ fill: #4f5; &:before { background-color: #4f5; } }
+.wind					{ fill: #5f3; &:before { background-color: #5f3; } }
+
+.charcoal				{ fill: #333; &:before { background-color: #111; } }
+.coal					{ fill: #334; &:before { background-color: #112; } }
+.coal-bed-methane		{ fill: #335; &:before { background-color: #113; } }
+.cooking-fuels			{ fill: #343; &:before { background-color: #121; } }
+.natural-gas, .gas		{ fill: #344; &:before { background-color: #122; } }
+.gas-flaring-reduction	{ fill: #345; &:before { background-color: #123; } }
+.hydro-large			{ fill: #353; &:before { background-color: #131; } }
+.incineration			{ fill: #354; &:before { background-color: #132; } }
+.oil					{ fill: #355; &:before { background-color: #133; } }
+.oil-and-gas			{ fill: #433; &:before { background-color: #211; } }
+
+.mixed,
+.mixed-or-unspecified	{ fill: #ccc; &:before { background-color: #ccc; } }
 .nuclear				{ fill: #ccc; &:before { background-color: #ccc; } }
-.oil					{ fill: #333; &:before { background-color: #333; } }
-.oil-and.gas			{ fill: #333; &:before { background-color: #333; } }
-.renewables				{ fill: #3f3; &:before { background-color: #3f3; } }
-.solar					{ fill: #3f3; &:before { background-color: #3f3; } }
-.wind					{ fill: #3f3; &:before { background-color: #3f3; } }
-.mixed					{ fill: #ccc; &:before { background-color: #ccc; } }
 
 // STAGES
 
-.exploration			{ fill: #33f; &:before { background-color: #33f; } }
-.extraction				{ fill: #33f; &:before { background-color: #33f; } }
-.transportation			{ fill: #33f; &:before { background-color: #33f; } }
-.production				{ fill: #33f; &:before { background-color: #33f; } }
 .consumption			{ fill: #33f; &:before { background-color: #33f; } }
-.transmission			{ fill: #33f; &:before { background-color: #33f; } }
-.point-of-use			{ fill: #33f; &:before { background-color: #33f; } }
-.mixed					{ fill: #33f; &:before { background-color: #33f; } }
+.exploration			{ fill: #34f; &:before { background-color: #34f; } }
+.extraction				{ fill: #35f; &:before { background-color: #35f; } }
+.mixed					{ fill: #43f; &:before { background-color: #43f; } }
+.point-of-use			{ fill: #44f; &:before { background-color: #44f; } }
+.power-production,
+.production				{ fill: #45f; &:before { background-color: #45f; } }
+.transmission-and-distribution,
+.transmission			{ fill: #53f; &:before { background-color: #53f; } }
+.transportation			{ fill: #54f; &:before { background-color: #54f; } }
 
 // INSTITUTIONS
 

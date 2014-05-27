@@ -22,7 +22,8 @@ define([
 			'click .handle.toggle': 'toggleView',
 			'click .fields .btn': 'setField',
 			'mouseenter .legend li': 'highlight',
-			'mouseleave .legend li': 'unhighlight'
+			'mouseleave .legend li': 'unhighlight',
+			'click .csv-link': 'downloadCSV'
 		},
 
 		initialize: function (options) {
@@ -56,7 +57,7 @@ define([
 
 			var legend = '';
 			_.each(legendFields, function (field) {
-				legend += '<li class="' + Help.slugify(field) + '">' + field + '</li>';
+				legend += '<li class="' + Help.slugify(field) + '"><span>' + field + '</span></li>';
 			});
 
 			this.$('.legend').html(legend);
@@ -72,6 +73,15 @@ define([
 				info: false
 			});
 			this.table.columns.adjust().draw();
+		},
+
+		downloadCSV: function () {
+			var mode = this.viewState.get('mode'),
+				subsidies = _.map(this.model.get('subsidies'), function (sub) {
+					if (sub.get('mode') === mode) { return sub.attributes; }
+				});
+			var CSV = Help.toCSV(subsidies);
+			window.open('data:text/csv;charset=utf-8,' + escape(CSV));
 		},
 
 		setField: function (ev) {
