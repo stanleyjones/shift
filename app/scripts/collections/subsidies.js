@@ -28,7 +28,7 @@ define([
 				this.trigger('change:status', {collection: 'Subsidies', status: 'Ready'});
 				return this.reset(res);
 			}
-		},	
+		},
 
 		setExpiry: function () {
 			var expires = new Date().getTime() + 1000 * 360 * G.EXPIRY;
@@ -43,7 +43,7 @@ define([
 
 		emptyLocalStorage: function () {
 			var m;
-			while (m = _.first(this.models)) { m.destroy(); }
+			while (m) { m.destroy(); m = _.first(this.models); }
 		},
 
 		fetchCache: function () {
@@ -68,7 +68,7 @@ define([
 					var parsedJSON = _this.parseJSON(json);
 
 					// Process JSON into Subsidies
-					_.each(parsedJSON, function (raw, index) {
+					_.each(parsedJSON, function (raw) {
 						var subsidies = _this.process(raw, mode);
 						if (!Array.isArray(subsidies)) { subsidies = new Array(subsidies); }
 						_.each(subsidies, function (subsidy) {
@@ -93,7 +93,7 @@ define([
 
 		parseJSON: function (json) {
 			var parsed = [];
-			_.each(json.rows, function(row, rowIndex) {
+			_.each(json.rows, function(row) {
 				var subsidy = {};
 				_.each(json.columns, function(col, colIndex) {
 					subsidy[json.columns[colIndex]] = row[colIndex];
@@ -104,8 +104,8 @@ define([
 		},
 
 		process: function (subsidy, mode) {
-			if (mode == 'international') { return this.processIntl(subsidy); }
-			if (mode == 'national') { return this.processNtnl(subsidy); }
+			if (mode === 'international') { return this.processIntl(subsidy); }
+			if (mode === 'national') { return this.processNtnl(subsidy); }
 			return false;
 		},
 
@@ -117,7 +117,7 @@ define([
 				amount: parseInt(subsidy.amountUSD, 10) || 0,
 				amountFormatted: Help.monetize(subsidy.amountUSD),
 				date: subsidy.date,
-				year: new Date(subsidy.date).getFullYear(),
+				year: subsidy.FY, //new Date(subsidy.date).getFullYear(),
 				mechanism: subsidy.mechanism,
 
 				region: subsidy.region,

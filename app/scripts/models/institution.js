@@ -39,8 +39,8 @@ define([
 		calcRatio: function () {
 			var amounts = {clean: 0, fossilFuel: 0, total: 0};
 			_.each(this.get('subsidies'), function (s) {
-				if (s.get('category') == 'clean') { amounts.clean += s.get('amount'); }
-				if (s.get('category') == 'fossil-fuel') { amounts.fossilFuel += s.get('amount'); }
+				if (s.get('category') === 'clean') { amounts.clean += s.get('amount'); }
+				if (s.get('category') === 'fossil-fuel') { amounts.fossilFuel += s.get('amount'); }
 				amounts.total += s.get('amount');
 			});
 			if (amounts.total) { this.set({ratio: ((amounts.clean - amounts.fossilFuel) / amounts.total).toFixed(2)}); }

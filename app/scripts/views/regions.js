@@ -6,9 +6,10 @@ define([
 	'backbone',
 	'd3',
 	'topojson',
+	'links',
 	'text!vendor/world.json',
 	'text!templates/regions.html'
-], function ($, _, Backbone, d3, Topojson, World, regionsTemplate) {
+], function ($, _, Backbone, d3, Topojson, Links, World, regionsTemplate) {
 	'use strict';
 
 	var RegionsView = Backbone.View.extend({
@@ -34,7 +35,7 @@ define([
 			this.initial = {
 				scale: this.size.h / 2.75,
 				rotate: [30,-10]
-			}
+			};
 			this.projection = d3.geo.orthographic()
 				.scale(this.initial.scale)
 				.translate([this.size.w / 2, this.size.h / 2])
@@ -59,6 +60,7 @@ define([
 			this.renderShading();
 			this.renderGraticule();
 			this.renderRegions();
+			this.renderLinks();
 
 			this.resetGlobe();
 			this.colorRegions();
@@ -136,7 +138,7 @@ define([
 		},
 
 		colorRegion: function (region) {
-			var color, value;			
+			var color, value;
 			if (this.viewState.get('mode') === 'international') {
 				color = d3.scale.linear()
 					.domain([-1, 0, 1])
@@ -157,20 +159,20 @@ define([
 				seconds = 120,
 				_this = this;
 			switch( command || 'start' ) {
-				case 'start':
-					d3.transition().ease('linear').duration(seconds * 1000)
-						.tween('rotate', function () {
-							var current = _this.projection.rotate(),
-							r = d3.interpolate(current, [current[0] + (rotations * 360), current[1]]);
-							return function (t) {
-								_this.projection.rotate(r(t));
-								_this.refreshGlobe();
-							};
-						});
-					break;
-				case 'stop':
-					d3.transition().duration(0);
-					break;
+			case 'start':
+				d3.transition().ease('linear').duration(seconds * 1000)
+					.tween('rotate', function () {
+						var current = _this.projection.rotate(),
+						r = d3.interpolate(current, [current[0] + (rotations * 360), current[1]]);
+						return function (t) {
+							_this.projection.rotate(r(t));
+							_this.refreshGlobe();
+						};
+					});
+				break;
+			case 'stop':
+				d3.transition().duration(0);
+				break;
 			}
 		},
 
@@ -218,19 +220,19 @@ define([
 						var p = d3.geo.centroid(regionPath),
 						r = d3.interpolate(_this.projection.rotate(), [-p[0], -p[1] + 15]),
 						z = d3.interpolate(_this.projection.scale(), _this.size.h);
-					return function(t) {
-						_this.projection.rotate(r(t));
-						_this.projection.scale(z(t));
-						_this.refreshGlobe();
-					};
-				});
+						return function (t) {
+							_this.projection.rotate(r(t));
+							_this.projection.scale(z(t));
+							_this.refreshGlobe();
+						};
+					});
 			}
 		},
 
 		highlight: function (cc) {
 			var worldJSON = JSON.parse(World),
 				regions = Topojson.feature(worldJSON, worldJSON.objects.countries).features,
-				regionPath = _.find(regions, function (r) { return r.id == cc; });
+				regionPath = _.find(regions, function (r) { return r.id === cc; });
 			this.zoomRegion(regionPath);
 		},
 
@@ -251,6 +253,14 @@ define([
 
 		release: function () {
 			if (this.m0) { this.m0 = null; }
+		},
+
+		renderLinks: function () {
+			var _this = this,
+				links = _.filter(Links, function (link) { return link.mode === _this.viewState.get('mode')});
+			_.each(links, function (link) {
+				console.log(link.mode, link.text, link.url);
+			});
 		}
 
 	});

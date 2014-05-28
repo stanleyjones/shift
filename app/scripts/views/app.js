@@ -103,8 +103,8 @@ define([
 		},
 
 		isReady: function (module) {
-			var module = module || 'App';
-			return this.appState.get(module) === 'Ready';
+			var mod = module || 'App';
+			return this.appState.get(mod) === 'Ready';
 		},
 
 		fire: function () {
@@ -165,7 +165,7 @@ define([
 		showRegions: function () {
 			var mode = this.appState.get('mode'),
 				cc = this.appState.get('id');
-				this.regionsView.viewState.set({mode: mode});
+			this.regionsView.viewState.set({mode: mode});
 
 			if (cc) { this.showRegion(); }
 			else { this.regionsView.resetGlobe(); }
@@ -202,7 +202,7 @@ define([
 				mode = this.appState.get('mode'),
 				region = Regions.findWhere({cc: cc});
 			if (region) {
-				var regionView = new RegionView({model: region, mode: mode});
+				new RegionView({model: region, mode: mode});
 				this.regionsView.highlight(cc);
 			}
 		},
@@ -211,7 +211,7 @@ define([
 			var slug = this.appState.get('id'),
 				institution = Institutions.findWhere({slug: slug});
 			if (institution) {
-				var institutionView = new InstitutionView({model: institution});
+				new InstitutionView({model: institution});
 				this.institutionsView.highlight(slug);
 			}
 		},
@@ -220,7 +220,7 @@ define([
 			var slug = this.appState.get('id'),
 				sector = Sectors.findWhere({slug: slug});
 			if (sector) {
-				var sectorView = new SectorView({model: sector});
+				new SectorView({model: sector});
 				this.sectorsView.highlight(slug);
 			}
 		},
@@ -243,7 +243,7 @@ define([
 			var projectSlug = this.appState.get('project'),
 				project = Projects.findWhere({slug: projectSlug});
 			if (project) {
-				var projectView = new ProjectView({model: project});
+				new ProjectView({model: project});
 			}
 			$('#project-' + projectSlug).modal();
 		}

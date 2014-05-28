@@ -46,8 +46,7 @@ define([
 				.append('g')
 			    .attr('transform', 'translate(' + (this.size.w - this.radius) / 2 + ',' + (this.size.h - this.radius) / 2 + ')');
 
-			var _this = this,
-				flat = _.map(this.collection.models, function (i) { return i.toJSON(); }),
+			var flat = _.map(this.collection.models, function (i) { return i.toJSON(); }),
 				groups = _.uniq(_.pluck(flat, 'group')),
 				grouped = { name: 'institutions', children: [] };
 
@@ -88,22 +87,22 @@ define([
 		renderGraph: function () {
 			var _this = this;
 
-			var bubbles = this.graph.selectAll('circle')
+			this.graph.selectAll('circle')
 				.data(this.nodes)
 				.enter().append('circle')
 					.attr('id', function (d) { return d.slug; })
 					.attr('class', function (d) { return d.parent ? (d.children ? 'bubble group' : 'bubble') : 'root'; })
-					.attr('cx', function (d) { return _this.size.w / 2; })
-					.attr('cy', function (d) { return _this.size.h / 2; })
+					.attr('cx', function () { return _this.size.w / 2; })
+					.attr('cy', function () { return _this.size.h / 2; })
 					.attr('r', 0)
 					.on('click', function (d) { _this.zoomInstitution(d); });
 
-			var labels = this.graph.selectAll('text')
+			this.graph.selectAll('text')
 				.data(this.nodes)
 				.enter().append('text')
 					.attr('class', function (d) { return d.parent ? (d.children ? 'label group' : 'label') : 'root'; })
-					.attr('x', function (d) { return _this.size.w / 2; })
-					.attr('y', function (d) { return _this.size.h / 2; })
+					.attr('x', function () { return _this.size.w / 2; })
+					.attr('y', function () { return _this.size.h / 2; })
 					.attr('dy', function (d) { return d.children ? '-.35em' : '.35em'; })
 					.attr('text-anchor', 'middle')
 					.style('opacity', 0)
@@ -135,8 +134,7 @@ define([
 		},
 
 		zoomInstitution: function (d) {
-			var _this = this,
-				institution = this.collection.findWhere({slug: d.slug});
+			var institution = this.collection.findWhere({slug: d.slug});
 			if (institution) {
 				Backbone.history.navigate('institutions/' + d.slug, {trigger: true});
 
@@ -163,7 +161,7 @@ define([
 		},
 
 		highlight: function (slug) {
-			var d = _.find(this.nodes, function (i) { return i.slug == slug; });
+			var d = _.find(this.nodes, function (i) { return i.slug === slug; });
 			this.zoomInstitution(d);
 		}
 

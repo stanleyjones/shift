@@ -45,6 +45,15 @@ module.exports = function (grunt) {
 				],
 				tasks: ['jst']
 			},
+			jshint: {
+				files: [
+					'Gruntfile.js',
+					'<%= yeoman.app %>/scripts/{,*/}*.js',
+					'!<%= yeoman.app %>/scripts/vendor/*',
+					'test/spec/{,*/}*.js'
+				],
+				tasks: ['jshint']
+			},
 			test: {
 				files: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'test/spec/**/*.js'],
 				tasks: ['test:true']
@@ -118,7 +127,7 @@ module.exports = function (grunt) {
 			all: {
 				options: {
 					run: true,
-					urls: ['http://localhost:<%= connect.test.options.port %>/index.html']
+					src: ['http://localhost:<%= connect.test.options.port %>/index.html']
 				}
 			}
 		},
@@ -273,7 +282,7 @@ module.exports = function (grunt) {
 		grunt.file.write('.tmp/scripts/templates.js', 'this.JST = this.JST || {};');
 	});
 
-	grunt.registerTask('server', function () {
+	grunt.registerTask('server', function (target) {
 		grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
 		grunt.task.run(['serve:' + target]);
 	});

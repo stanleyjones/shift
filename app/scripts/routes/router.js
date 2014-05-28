@@ -2,15 +2,8 @@
 
 define([
 	'jquery',
-	'backbone',
-	'collections/subsidies',
-	'collections/regions',
-	'collections/institutions',
-	'views/regions',
-	'views/region',
-	'views/institutions',
-	'views/sectors'
-], function ($, Backbone, Subsidies, Regions, Institutions, RegionsView, RegionView, InstitutionsView, SectorsView) {
+	'backbone'
+], function ($, Backbone) {
 	'use strict';
 
 	var Router = Backbone.Router.extend({

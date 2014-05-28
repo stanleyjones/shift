@@ -81,7 +81,7 @@ define([
 					if (sub.get('mode') === mode) { return sub.attributes; }
 				});
 			var CSV = Help.toCSV(subsidies);
-			window.open('data:text/csv;charset=utf-8,' + escape(CSV));
+			window.open('data:text/csv;charset=utf-8,' + encodeURI(CSV));
 		},
 
 		setField: function (ev) {
@@ -94,7 +94,7 @@ define([
 			d3.select('.stack.' + field).classed('highlight', true);
 		},
 
-		unhighlight: function (ev) {
+		unhighlight: function () {
 			d3.selectAll('.stack').classed('highlight', false);
 		},
 

@@ -11,7 +11,7 @@ define([
 	var Sectors = Backbone.Collection.extend({
 		model: Sector,
 
-		initialize: function (options) {
+		initialize: function () {
 			this.listenTo(Subsidies, 'reset', this.resetAll);
 		},
 

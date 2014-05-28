@@ -11,7 +11,7 @@ define([
 	var Institutions = Backbone.Collection.extend({
 		model: Institution,
 
-		initialize: function (options) {
+		initialize: function () {
 			this.listenTo(Subsidies, 'reset', this.resetAll);
 		},
 

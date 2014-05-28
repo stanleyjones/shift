@@ -79,7 +79,7 @@ define([
 			d3.select('.stack.' + field).classed('highlight', true);
 		},
 
-		unhighlight: function (ev) {
+		unhighlight: function () {
 			d3.selectAll('.stack').classed('highlight', false);
 		},
 
@@ -88,7 +88,8 @@ define([
 			this.viewState.set({view: view});
 			$('.view-' + view).show().siblings('.view').hide();
 			this.table.columns.adjust().draw();
-		}	});
+		}
+	});
 
 	return SectorView;
 });

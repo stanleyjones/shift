@@ -17,7 +17,7 @@ define([
 			national: false
 		},
 
-		initialize: function (options) {
+		initialize: function () {
 			this.calcRatio();
 			this.calcTotal();
 			this.setVisibility('international');
@@ -30,8 +30,8 @@ define([
 
 			_.each(this.get('subsidies'), function (s) {
 				if (s.get('mode') === mode) {
-					if (s.get('category') == 'clean') { amounts.clean += s.get('amount'); }
-					if (s.get('category') == 'fossil-fuel') { amounts.fossilFuel += s.get('amount'); }
+					if (s.get('category') === 'clean') { amounts.clean += s.get('amount'); }
+					if (s.get('category') === 'fossil-fuel') { amounts.fossilFuel += s.get('amount'); }
 					amounts.total += s.get('amount');
 				}
 			});

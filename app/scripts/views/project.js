@@ -1,26 +1,26 @@
 /*global define*/
 
 define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'text!templates/project.html'
+	'jquery',
+	'underscore',
+	'backbone',
+	'text!templates/project.html'
 ], function ($, _, Backbone, projectTemplate) {
-    'use strict';
+	'use strict';
 
-    var ProjectView = Backbone.View.extend({
-    	el: '#project',
+	var ProjectView = Backbone.View.extend({
+		el: '#project',
 
-        template: _.template(projectTemplate),
+		template: _.template(projectTemplate),
 
-        initialize: function () {
-        	this.render();
-        },
+		initialize: function () {
+			this.render();
+		},
 
-        render: function () {
-        	this.$el.html(this.template(this.model.toJSON()));
-        }
-    });
+		render: function () {
+			this.$el.html(this.template(this.model.toJSON()));
+		}
+	});
 
-    return ProjectView;
+	return ProjectView;
 });

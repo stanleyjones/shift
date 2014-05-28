@@ -1,3 +1,5 @@
+/*global define*/
+
 define([
 	'jquery',
 	'underscore',
@@ -15,7 +17,7 @@ define([
 				size = {
 					h: _this.$('.bars').height(),
 					w: _this.$('.bars').width()
-				}
+				};
 
 			// Setup chart
 
@@ -44,16 +46,22 @@ define([
 			// 3. Remap to D3's preferred format
 
 			var layers = _.map(uniqFields, function (uniqField) {
-				var values = [];
-				for (var year = G.START_YEAR; year <= G.END_YEAR; year++) {
-					var filteredSubsidies = _.filter(subsidies, function (sub) {
-						return sub.get('year') == year && sub.get(field) == uniqField;
+				var values = [],
+				filterSubsidies = function (year, field) {
+					return _.filter(subsidies, function (sub) {
+						return sub.get('year') === year && sub.get(field) === uniqField;
 					});
+				},
+				reduceSubsidies = function (subsidies) {
+					return _.reduce(subsidies, function (memo, sub) {
+						return memo + sub.get('amount');
+					}, 0);
+				};
+				for (var year = G.START_YEAR; year <= G.END_YEAR; year++) {
+					var filteredSubsidies = filterSubsidies(year, field);
 					values.push({
 						x: year,
-						y: _.reduce(filteredSubsidies, function (memo, sub) {
-							return memo + sub.get('amount');
-						}, 0)
+						y: reduceSubsidies(filteredSubsidies)
 					});
 				}
 				return {name: uniqField, values: values};
@@ -92,23 +100,23 @@ define([
 			var bars = stacks.selectAll('rect')
 				.data(function (d) { return d.values; });
 
-				bars.enter()
-					.append('rect')
-					.attr('x', function(d) { return 2 * margin + x(d.x); })
-					.attr('y', h)
-					.attr('height', 0)
-					.attr('width', x.rangeBand());
+			bars.enter()
+				.append('rect')
+				.attr('x', function(d) { return 2 * margin + x(d.x); })
+				.attr('y', h)
+				.attr('height', 0)
+				.attr('width', x.rangeBand());
 
-				bars.transition()
-					.delay(function (d, i) { return i * 10; })
-					.duration(500)
-					.attr('y', function(d) { return Math.max(0, y(d.y0) - (h - y(d.y))); })
-					.attr('height', function(d) { return Math.max(0, h - y(d.y)); });
+			bars.transition()
+				.delay(function (d, i) { return i * 10; })
+				.duration(500)
+				.attr('y', function(d) { return Math.max(0, y(d.y0) - (h - y(d.y))); })
+				.attr('height', function(d) { return Math.max(0, h - y(d.y)); });
 		
-				bars.exit().transition()
-					.duration(500)
-					.attr('height', 0)
-					.remove();
+			bars.exit().transition()
+				.duration(500)
+				.attr('height', 0)
+				.remove();
 
 			// Add some axes
 
@@ -131,7 +139,7 @@ define([
 				.attr('transform', 'translate(' + margin * 2 + ',0)')
 				.call(yAxis);
 		}
-	}
+	};
 
 	return charts;
 });

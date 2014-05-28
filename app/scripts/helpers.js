@@ -11,7 +11,7 @@ define('helpers', function () {
 
 		suffix: function (num) {
 			var sizes = ' KMBT';
-			if (num <= 0) return '0';
+			if (num <= 0) { return '0'; }
 			var t2 = Math.min(Math.floor(Math.log(num) / Math.log(1000)), 12);
 			return (Math.round(num * 100 / Math.pow(1000, t2)) / 100) + sizes.charAt(t2).replace(' ', '');
 		},
@@ -24,29 +24,21 @@ define('helpers', function () {
 		},
 
 		toCSV: function (json) {
-			var array = json; //typeof json !== 'object' ? JSON.parse(json) : json;
+			var CSV, header = '', value;
 
-			var CSV = '';
-			var line = '';
-
-			// Headers
-			var head = array[0];
-			for (var index in array[0]) {
-				var value = index + "";
-				line += '"' + value.replace(/"/g, '""') + '",';
+			for (var index in json[0]) { // Headers
+				value = index + '';
+				header += '"' + value.replace(/"/g, '""') + '",';
 			}
-			line = line.slice(0, -1);
-			CSV += line + '\r\n';
+			CSV = header.slice(0, -1) + '\r\n';
 
-			// Rows
-			for (var i = 0; i < array.length; i++) {
+			for (var row = 0; row < json.length; row++) { // Rows
 				var line = '';
-				for (var index in array[i]) {
-					var value = array[i][index] + "";
+				for (index in json[row]) {
+					value = json[row][index] + '';
 					line += '"' + value.replace(/"/g, '""') + '",';
 				}
-				line = line.slice(0, -1);
-				CSV += line + '\r\n';
+				CSV += line.slice(0, -1) + '\r\n';
 			}
 			return CSV;
 		}
