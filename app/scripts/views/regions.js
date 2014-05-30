@@ -24,8 +24,7 @@ define([
 		},
 
 		initialize: function () {
-			this.viewState = new Backbone.Model({mode: null});
-
+			this.viewState = new Backbone.Model({mode: 'international'});
 			this.listenTo(this.viewState, 'change:mode', this.render);
 
 			this.size = {
@@ -60,7 +59,6 @@ define([
 			this.renderShading();
 			this.renderGraticule();
 			this.renderRegions();
-			this.renderLinks();
 
 			this.resetGlobe();
 			this.colorRegions();
@@ -253,14 +251,6 @@ define([
 
 		release: function () {
 			if (this.m0) { this.m0 = null; }
-		},
-
-		renderLinks: function () {
-			var _this = this,
-				links = _.filter(Links, function (link) { return link.mode === _this.viewState.get('mode')});
-			_.each(links, function (link) {
-				console.log(link.mode, link.text, link.url);
-			});
 		}
 
 	});

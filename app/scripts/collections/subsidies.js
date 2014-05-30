@@ -17,16 +17,19 @@ define([
 
 		initialize: function () {
 			this.comparator = 'date';
+			this.on('reset', function () {
+				this.trigger('change:status', {collection: 'Subsidies', status: 'Ready'});
+			});
 		},
 
 		parse: function (res) {
-			this.trigger('change:status', {collection: 'Subsidies', status: 'Loading'});
 			if (!res.length || this.isExpired()) {
 				this.trigger('change:status', {collection: 'Subsidies', status: 'Updating'});
 				this.fetchCache();
 			} else {
-				this.trigger('change:status', {collection: 'Subsidies', status: 'Ready'});
-				return this.reset(res);
+				this.trigger('change:status', {collection: 'Subsidies', status: 'Adding', count: res.length});
+				this.trigger('reset');
+				return res;
 			}
 		},
 
@@ -50,17 +53,13 @@ define([
 			var _this = this,
 				cache = {};
 
-			_this.trigger('change:status', {collection: 'Subsidies', status: 'Retrieving'});
-
 			var promises = _.map(G.DATACACHES, function (src) {
-				return $.getJSON(src.url).done( function (json) { cache[src.mode] = json; });
+				return $.getJSON(src.url).done(function (json) { cache[src.mode] = json; });
 			});
 
 			this.emptyLocalStorage();
 
 			$.when.apply(null, promises).then(function () {
-
-				_this.trigger('change:status', {collection: 'Subsidies', status: 'Processing'});
 
 				_.each(cache, function (json, mode) {
 
@@ -82,7 +81,7 @@ define([
 					});
 
 				});
-				_this.trigger('change:status', {collection: 'Subsidies', status: 'Ready'});
+				_this.trigger('change:status', {collection: 'Subsidies', status: 'Adding', count: _this.models.length});
 				_this.reset(_this.models);
 				_this.setExpiry();
 			})
@@ -143,13 +142,14 @@ define([
 		},
 
 		processNtnl: function (subsidy) {
-			var subsidies = [];
+			var subsidies = [],
+				multiplier = 1000000;
 			for (var year = G.START_YEAR; year < G.END_YEAR; year++) {
 				var newSubsidy = {
 					mode: 'national',
 					visible: 'true',
-					amount: parseInt(1000000 * subsidy['amount' + year] * subsidy['XR' + year], 10) || 0,
-					amountFormatted: Help.monetize(1000000 * subsidy['amount' + year] * subsidy['XR' + year]),
+					amount: parseInt(multiplier * subsidy['amount' + year] * subsidy['XR' + year], 10) || 0,
+					amountFormatted: Help.monetize(multiplier * subsidy['amount' + year] * subsidy['XR' + year]),
 					year: year,
 
 					region: subsidy.region,

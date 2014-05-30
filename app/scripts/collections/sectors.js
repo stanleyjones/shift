@@ -12,13 +12,18 @@ define([
 		model: Sector,
 
 		initialize: function () {
-			this.listenTo(Subsidies, 'reset', this.resetAll);
+			// this.listenTo(Subsidies, 'reset', this.addAll);
 		},
 
-		resetAll: function () {
-			this.trigger('change:status', {collection: 'Sectors', status: 'Resetting'});
-			var sectorSlugs = _.uniq(Subsidies.pluck('sectorSlug'), false);
-			this.addAll(sectorSlugs);
+		addAll: function () {
+			var slugs = _.uniq(Subsidies.pluck('sectorSlug'), false);
+			this.trigger('change:status', {collection: 'Sectors', status: 'Adding', count: slugs.length});
+
+			_.each(slugs, function (slug) {
+				var sectorSubsidies = Subsidies.toSector(slug);
+				this.addOne(slug, sectorSubsidies);
+			}, this);
+			this.trigger('change:status', {collection: 'Sectors', status: 'Ready'});
 		},
 
 		addOne: function (slug, subsidies) {
@@ -30,16 +35,8 @@ define([
 					subsidies: subsidies
 				});
 			this.add(sector);
-		},
-
-		addAll: function (slugs) {
-			_.each(slugs, function (slug) {
-				var sectorSubsidies = Subsidies.toSector(slug);
-				this.addOne(slug, sectorSubsidies);
-			}, this);
-			this.trigger('change:status', {collection: 'Sectors', status: 'Ready'});
-			this.trigger('reset');
 		}
+
 	});
 
 	return new Sectors();

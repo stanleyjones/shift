@@ -1,53 +1,69 @@
+@fossil:		#312;
+@clean:			#3f3;
+@other:			#ccc;
+@stage:			#36f;
+@institution:	#63f;
+
 // CATEGORIES
 
-.fossil-fuel			{ fill: #333; color: #999; background-color: #333; }
-.clean 					{ fill: #3f3; color: #060; background-color: #3f3; }
-.other					{ fill: #ccc; color: #666; background-color: #ccc; }
+.fossil-fuel	{ fill: @fossil; color: #999; background-color: @fossil; }
+.clean 			{ fill: @clean; color: #060; background-color: @clean; }
+.other			{ fill: @other; color: #666; background-color: @other; }
 
 // SECTORS
 
 .bioenergy,
 .biofuels,
-.biomass				{ fill: #3f3; &:before { background-color: #3f3; } }
-.efficiency				{ fill: #3f4; &:before { background-color: #3f4; } }
-.geothermal				{ fill: #3f5; &:before { background-color: #3f5; } }
-.hydro-small			{ fill: #4f3; &:before { background-color: #4f3; } }
-.renewables				{ fill: #4f4; &:before { background-color: #4f4; } }
-.solar					{ fill: #4f5; &:before { background-color: #4f5; } }
-.wind					{ fill: #5f3; &:before { background-color: #5f3; } }
+.biomass		{ fill: spin(@clean, -30); &:before { background-color: spin(@clean, -30); } }
+.efficiency		{ fill: spin(@clean, -20); &:before { background-color: spin(@clean, -20); } }
+.geothermal		{ fill: spin(@clean, -10); &:before { background-color: spin(@clean, -10); } }
+.hydro-small	{ fill: spin(@clean, 0); &:before { background-color: spin(@clean, 0); } }
+.renewables		{ fill: spin(@clean, 10); &:before { background-color: spin(@clean, 10); } }
+.solar			{ fill: spin(@clean, 20); &:before { background-color: spin(@clean, 20); } }
+.wind			{ fill: spin(@clean, 30); &:before { background-color: spin(@clean, 30); } }
 
-.charcoal				{ fill: #333; &:before { background-color: #111; } }
-.coal					{ fill: #334; &:before { background-color: #112; } }
-.coal-bed-methane		{ fill: #335; &:before { background-color: #113; } }
-.cooking-fuels			{ fill: #343; &:before { background-color: #121; } }
-.natural-gas, .gas		{ fill: #344; &:before { background-color: #122; } }
-.gas-flaring-reduction	{ fill: #345; &:before { background-color: #123; } }
-.hydro-large			{ fill: #353; &:before { background-color: #131; } }
-.incineration			{ fill: #354; &:before { background-color: #132; } }
-.oil					{ fill: #355; &:before { background-color: #133; } }
-.oil-and-gas			{ fill: #433; &:before { background-color: #211; } }
+.charcoal			{ fill: spin(@fossil, -40); &:before { background-color: spin(@fossil, -40); } }
+.coal				{ fill: spin(@fossil, -30); &:before { background-color: spin(@fossil, -30); } }
+.coal-bed-methane	{ fill: spin(@fossil, -20); &:before { background-color: spin(@fossil, -20); } }
+.cooking-fuels		{ fill: spin(@fossil, -10); &:before { background-color: spin(@fossil, -10); } }
+.natural-gas,
+.gas				{ fill: spin(@fossil, 0); &:before { background-color: spin(@fossil, 0); } }
+.gas-flaring-reduction	{ fill: spin(@fossil, 10); &:before { background-color: spin(@fossil, 10); } }
+.hydro-large		{ fill: spin(@fossil, 20); &:before { background-color: spin(@fossil, 20); } }
+.incineration		{ fill: spin(@fossil, 30); &:before { background-color: spin(@fossil, 30); } }
+.oil				{ fill: spin(@fossil, 40); &:before { background-color: spin(@fossil, 40); } }
+.oil-and-gas		{ fill: spin(@fossil, 50); &:before { background-color: spin(@fossil, 50); } }
 
 .mixed,
-.mixed-or-unspecified	{ fill: #ccc; &:before { background-color: #ccc; } }
-.nuclear				{ fill: #ccc; &:before { background-color: #ccc; } }
+.mixed-or-unspecified	{ fill: @other; &:before { background-color: @other; } }
+.nuclear				{ fill: @other; &:before { background-color: @other; } }
 
 // STAGES
 
-.consumption			{ fill: #33f; &:before { background-color: #33f; } }
-.exploration			{ fill: #34f; &:before { background-color: #34f; } }
-.extraction				{ fill: #35f; &:before { background-color: #35f; } }
-.mixed					{ fill: #43f; &:before { background-color: #43f; } }
-.point-of-use			{ fill: #44f; &:before { background-color: #44f; } }
+.consumption			{ fill: spin(@stage, -40); &:before { background-color: spin(@stage, -40); } }
+.exploration			{ fill: spin(@stage, -30); &:before { background-color: spin(@stage, -30); } }
+.extraction				{ fill: spin(@stage, -20); &:before { background-color: spin(@stage, -20); } }
+.mixed					{ fill: spin(@stage, -10); &:before { background-color: spin(@stage, -10); } }
+.point-of-use			{ fill: spin(@stage, 0); &:before { background-color: spin(@stage, 0); } }
 .power-production,
-.production				{ fill: #45f; &:before { background-color: #45f; } }
+.production				{ fill: spin(@stage, 10); &:before { background-color: spin(@stage, 10); } }
 .transmission-and-distribution,
-.transmission			{ fill: #53f; &:before { background-color: #53f; } }
-.transportation			{ fill: #54f; &:before { background-color: #54f; } }
+.transmission			{ fill: spin(@stage, 20); &:before { background-color: spin(@stage, 20); } }
+.transportation			{ fill: spin(@stage, 30); &:before { background-color: spin(@stage, 30); } }
 
 // INSTITUTIONS
 
-.japan-international-cooperation-agency { fill: #369; &:before { background-color: #369; } }
-.inter-american-development-bank { fill: #149; &:before { background-color: #149; } }
+.african-development-bank 								{ fill: spin(@institution, 0); &:before { background-color: spin(@institution, 0); } }
+.asian-development-bank 								{ fill: spin(@institution, 10); &:before { background-color: spin(@institution, 10); } }
+.european-bank-for-reconstruction-and-development 		{ fill: spin(@institution, 20); &:before { background-color: spin(@institution, 20); } }
+.european-investment-bank 								{ fill: spin(@institution, 30); &:before { background-color: spin(@institution, 30); } }
+.inter-american-development-bank 						{ fill: spin(@institution, 40); &:before { background-color: spin(@institution, 40); } }
+.international-bank-for-reconstruction-and-development 	{ fill: spin(@institution, 50); &:before { background-color: spin(@institution, 50); } }
+.international-development-association 					{ fill: spin(@institution, 60); &:before { background-color: spin(@institution, 60); } }
+.international-finance-corporation 						{ fill: spin(@institution, 70); &:before { background-color: spin(@institution, 70); } }
+.japan-international-cooperation-agency 				{ fill: spin(@institution, 80); &:before { background-color: spin(@institution, 80); } }
+.multilateral-investment-guarantee-agency 				{ fill: spin(@institution, 90); &:before { background-color: spin(@institution, 90); } }
+
 
 // HIGHLIGHT
 

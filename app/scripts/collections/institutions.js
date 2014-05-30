@@ -12,13 +12,18 @@ define([
 		model: Institution,
 
 		initialize: function () {
-			this.listenTo(Subsidies, 'reset', this.resetAll);
+			// this.listenTo(Subsidies, 'reset', this.addAll);
 		},
 
-		resetAll: function () {
-			this.trigger('change:status', {collection: 'Institutions', status: 'Resetting'});
-			var institutionAbbrs = _.uniq(Subsidies.pluck('institutionAbbr'), false);
-			this.addAll(institutionAbbrs);
+		addAll: function () {
+			var abbrs = _.uniq(Subsidies.pluck('institutionAbbr'), false);
+			this.trigger('change:status', {collection: 'Institutions', status: 'Adding', count: abbrs.length});
+
+			_.each(abbrs, function (abbr) {
+				var institutionSubsidies = Subsidies.fromInstitution(abbr);
+				this.addOne(abbr, institutionSubsidies);
+			}, this);
+			this.trigger('change:status', {collection: 'Institutions', status: 'Ready'});
 		},
 
 		addOne: function (abbr, subsidies) {
@@ -30,15 +35,6 @@ define([
 					subsidies: subsidies
 				});
 			this.add(institution);
-		},
-
-		addAll: function (abbrs) {
-			_.each(abbrs, function (abbr) {
-				var institutionSubsidies = Subsidies.fromInstitution(abbr);
-				this.addOne(abbr, institutionSubsidies);
-			}, this);
-			this.trigger('change:status', {collection: 'Institutions', status: 'Ready'});
-			this.trigger('reset');
 		}
 	});
 

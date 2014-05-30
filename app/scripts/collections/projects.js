@@ -12,31 +12,31 @@ define([
 		model: Project,
 
 		initialize: function () {
-			this.listenTo(Subsidies, 'reset', this.resetAll);
+			this.comparator = 'slug';
 		},
 
-		resetAll: function () {
-			this.trigger('change:status', {collection: 'Projects', status: 'Resetting'});
-			this.addAll(_.uniq(Subsidies.pluck('projectSlug')));
+		addAll: function () {
+			var slugs = _.uniq(Subsidies.map(function (sub) {
+				if (sub.get('mode') === 'international') { return sub.get('projectSlug'); }
+			}));
+
+			this.trigger('change:status', {collection: 'Projects', status: 'Adding', count: slugs.length});
+
+			_.each(slugs, function (slug) {
+				var projectSubsidies = Subsidies.where({projectSlug: slug, mode: 'international'});
+				if (projectSubsidies.length) { this.addOne(slug, projectSubsidies); }
+			}, this);
+			this.trigger('change:status', {collection: 'Projects', status: 'Ready'});
 		},
 
 		addOne: function (slug, subsidies) {
-			var seed = _.first(subsidies),
-				project = new Project({
+			var seed = _.first(subsidies);
+			var	project = new Project({
 					name: seed.get('project'),
-					slug: seed.get('projectSlug'),
+					slug: slug,
 					subsidies: subsidies
 				});
 			this.add(project);
-		},
-
-		addAll: function (slugs) {
-			_.each(slugs, function (slug) {
-				var projectSubsidies = Subsidies.forProject(slug);
-				this.addOne(slug, projectSubsidies);
-			}, this);
-			this.trigger('change:status', {collection: 'Projects', status: 'Ready'});
-			this.trigger('reset');
 		}
 	});
 

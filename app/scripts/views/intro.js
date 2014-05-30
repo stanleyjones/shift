@@ -19,18 +19,20 @@ define([
 			'click .select-international .open': 'loadInternational'
 		},
 
-		initialize: function () {
-			this.listenTo(Subsidies, 'change:status', this.renderProgress);
+		initialize: function (options) {
+			this.app = options.app;
+			this.listenTo(this.app.appState, 'change:status', this.renderProgress);
 			this.render();
 		},
 
 		render: function () {
-			this.$el.html(this.template());
+			this.$el.html(this.template);
 		},
 
 		renderProgress: function (args) {
-			var loadMessage = (args && args.status) ? args.status : 'Loading';
-			this.$el.find('.open').text(loadMessage);
+			if (this.app.isReady()) {
+				this.$el.find('.open').attr('disabled', false).text('Go');
+			}
 		},
 
 		loadNational: function () {

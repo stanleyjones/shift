@@ -12,13 +12,19 @@ define([
 		model: Region,
 
 		initialize: function () {
-			this.listenTo(Subsidies, 'reset', this.resetAll);
+			// this.listenTo(Subsidies, 'reset', this.addAll);
 			this.range = {min: 0, max: 0};
 		},
 
-		resetAll: function () {
-			this.trigger('change:status', {collection: 'Regions', status: 'Resetting'});
-			this.addAll(_.uniq(Subsidies.pluck('regionCC')));
+		addAll: function () {
+			var ccs = _.uniq(Subsidies.pluck('regionCC'));
+			this.trigger('change:status', {collection: 'Regions', status: 'Adding', count: ccs.length});
+
+			_.each(ccs, function (cc) {
+				var regionSubsidies = Subsidies.inRegion(cc);
+				this.addOne(cc, regionSubsidies);
+			}, this);
+			this.trigger('change:status', {collection: 'Regions', status: 'Ready'});
 		},
 
 		addOne: function (cc, subsidies) {
@@ -33,15 +39,6 @@ define([
 				min: Math.min(region.get('total'), this.range.min),
 				max: Math.max(region.get('total'), this.range.max)
 			};
-		},
-
-		addAll: function (ccs) {
-			_.each(ccs, function (cc) {
-				var regionSubsidies = Subsidies.inRegion(cc);
-				this.addOne(cc, regionSubsidies);
-			}, this);
-			this.trigger('change:status', {collection: 'Regions', status: 'Ready'});
-			this.trigger('reset');
 		}
 
 	});

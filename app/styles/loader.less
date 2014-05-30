@@ -12,6 +12,7 @@
 		width: 100%;
 		text-align: center;
 		color: #fff;
+		z-index: @zindex-modal;
 	}
 	.status-indicator {
 		position: absolute;
@@ -22,13 +23,20 @@
 		margin-left: -64px;
 		margin-top: -64px;
 		border-top: 1em solid @brand-primary;
-		border-left: 1em dotted fade(@brand-primary, 75%);
-		border-bottom: 1em dotted fade(@brand-primary, 50%);
-		border-right: 1em dotted fade(@brand-primary, 25%);
+		border-left: 1em solid fade(@brand-primary, 25%);
+		border-bottom: 1em solid fade(@brand-primary, 25%);
+		border-right: 1em solid fade(@brand-primary, 25%);
 		border-radius: 50%;
-		-webkit-animation: spin 1s infinite linear;
-		   -moz-animation: spin 1s infinite linear;
-				animation: spin 1s infinite linear;
+		-webkit-animation: spin .5s infinite linear;
+		   -moz-animation: spin .5s infinite linear;
+				animation: spin .5s infinite linear;
+		z-index: @zindex-modal;
+	}
+	&.ready .status-indicator {
+		background-color: @brand-primary;
+		-webkit-animation: none;
+		   -moz-animation: none;
+		        animation: none;
 	}
 }
 

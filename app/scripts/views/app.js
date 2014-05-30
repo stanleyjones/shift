@@ -11,6 +11,7 @@ define([
 	'collections/regions',
 	'collections/institutions',
 	'collections/sectors',
+	'views/loader',
 	'views/intro',
 	'views/static',
 	'views/regions',
@@ -20,7 +21,7 @@ define([
 	'views/sectors',
 	'views/sector',
 	'views/project'
-], function ($, _, Backbone, Bootstrap, Router, Subsidies, Projects, Regions, Institutions, Sectors, IntroView, StaticView, RegionsView, RegionView, InstitutionsView, InstitutionView, SectorsView, SectorView, ProjectView) {
+], function ($, _, Backbone, Bootstrap, Router, Subsidies, Projects, Regions, Institutions, Sectors, LoaderView, IntroView, StaticView, RegionsView, RegionView, InstitutionsView, InstitutionView, SectorsView, SectorView, ProjectView) {
 	'use strict';
 
 	var AppView = Backbone.View.extend({
@@ -36,21 +37,22 @@ define([
 
 		initialize: function () {
 			this.appState = new Backbone.Model({
-				App: 'Initializing',
+				status: 'Initialized',
 				mode: 'international',
 				pane: null,
 				card: null,
 				id: null,
 				project: null
 			});
-			this.appState.on('change', this.reportStatus, this);
+			this.appState.on('change:status', this.reportStatus, this);
 			this.appState.on('change:pane', this.handlePane, this);
 			this.appState.on('change:card', this.handleCard, this);
 			this.appState.on('change:id', this.handleCard, this);
 			this.appState.on('change:project', this.handleProject, this);
-			this.appState.set({App: 'Loading'});
 
 			this.router = new Router(this);
+			this.loader = new LoaderView();
+			this.appState.set({status: 'Loading'});
 
 			this.listenTo(Subsidies, 'change:status', this.updateStatus);
 			this.listenTo(Projects, 'change:status', this.updateStatus);
@@ -63,32 +65,42 @@ define([
 			this.main = this.$('#main');
 			this.card = this.$('#card');
 
-			Subsidies.fetch();
+			_.delay(function () { Subsidies.fetch(); }, 250);
 		},
 
 // STATUS
 
-		reportStatus: function (args) {
-			var timerStart = this.timer || new Date(),
+		reportStatus: function () {
+			var status = this.appState.get('status'),
+				timerStart = this.timer || new Date(),
 				timerStop = new Date(),
 				elapsed = ((timerStop - timerStart) / 1000).toFixed(2) + 's';
-			console.log(elapsed, args.changed);
 			this.timer = timerStart;
-			this.$('#loader .status-message').text(this.appState.get('App'));
+			console.log(elapsed, status);
+			this.loader.viewState.set({status: status});
 		},
 
 		updateStatus: function (args) {
-			if (args && args.collection && args.status) {
+			if (args.status === 'Ready') {
 				this.appState.set(args.collection, args.status);
-			}
-			if (this.isReady('Regions')) {
-				this.regionsView = this.regionsView || new RegionsView({collection: Regions});
-			}
-			if (this.isReady('Institutions')) {
-				this.institutionsView = this.institutionsView || new InstitutionsView({collection: Institutions});
-			}
-			if (this.isReady('Sectors')) {
-				this.sectorsView = this.sectorsView || new SectorsView({collection: Sectors});
+				if (args.collection === 'Subsidies') {
+					_.delay(function () { Regions.addAll(); }, 500);
+				}
+				if (args.collection === 'Regions') {
+					this.regionsView = new RegionsView({collection: Regions});
+					_.delay(function () { Institutions.addAll(); }, 500);
+				}
+				if (args.collection === 'Institutions') {
+					this.institutionsView = new InstitutionsView({collection: Institutions});
+					_.delay(function () { Sectors.addAll(); }, 500);
+				}
+				if (args.collection === 'Sectors') {
+					this.sectorsView = new SectorsView({collection: Sectors});
+					_.delay(function () { Projects.addAll(); }, 500);
+				}
+			} else {
+				var status = args.status + ' ' + (args.count ? args.count + ' ' : '') + args.collection;
+				this.appState.set({status: status});
 			}
 			if (
 				this.isReady('Subsidies') &&
@@ -97,18 +109,18 @@ define([
 				this.isReady('Institutions') &&
 				this.isReady('Sectors')
 			) {
-				this.appState.set({App: 'Ready'});
+				this.appState.set({status: 'Ready'});
 				this.fire();
 			}
 		},
 
 		isReady: function (module) {
-			var mod = module || 'App';
+			var mod = module || 'status';
 			return this.appState.get(mod) === 'Ready';
 		},
 
 		fire: function () {
-			this.$('#loader').hide();
+			this.$('#loader').addClass('ready').delay(1000).fadeOut();
 			this.handlePane();
 			this.handleCard();
 		},
@@ -117,7 +129,6 @@ define([
 
 		handlePane: function () {
 			if (this.isReady() && this.appState.has('pane')) { this.showPane(); }
-			else if (!this.isReady()) { this.$('#loader').show(); }
 		},
 
 		handleCard: function () {
@@ -132,9 +143,9 @@ define([
 // PANES
 
 		showIntro: function() {
-			this.introView = this.introView || new IntroView();
-			this.$('#loader').hide();
-			this.$('#intro').show();
+			this.introView = this.introView || new IntroView({app: this});
+			// this.$('#loader').hide();
+			// this.$('#intro').show();
 		},
 
 		showStatic: function(page) {

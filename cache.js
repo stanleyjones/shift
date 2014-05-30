@@ -1,22 +1,23 @@
+'use strict';
+
 var request = require('request'),
 	fs = require('fs'),
-	api_base = 'https://www.googleapis.com/fusiontables/v1/query?sql=SELECT * FROM ',
-	api_query = " WHERE visible LIKE 'true'",
-	api_key = '&key=AIzaSyAxIxiJR_hGp8eoCsadSvloPYwbEaaGYDo',
-	intl_doc_id = '1j5id7wwoBPUV8timpBggyxCNaY2wNdyP8V9EZ91j',
-	ntnl_doc_id = '1k52U4eIocmwCSqKWLih2cpZMcpk4Q0x4ifAeCOD8',
-	data_dir = 'app/data/';
+	APIBase = 'https://www.googleapis.com/fusiontables/v1/query?sql=SELECT * FROM ',
+	APIQuery = ' WHERE visible LIKE \'true\'',
+	APIKey = '&key=AIzaSyAxIxiJR_hGp8eoCsadSvloPYwbEaaGYDo',
+	IntlDocID = '1j5id7wwoBPUV8timpBggyxCNaY2wNdyP8V9EZ91j',
+	NtnlDocID = '1k52U4eIocmwCSqKWLih2cpZMcpk4Q0x4ifAeCOD8',
+	DataDir = 'app/data/';
 
 console.log('Downloading international subsidies...');
-request(api_base + intl_doc_id + api_query + api_key, status)
-	.pipe(fs.createWriteStream(data_dir + 'intl.json'));
-
+request(APIBase + IntlDocID + APIQuery + APIKey, status)
+	.pipe(fs.createWriteStream(DataDir + 'intl.json'));
 
 console.log('Downloading national subsidies...');
-request(api_base + ntnl_doc_id + api_key, status)
-	.pipe(fs.createWriteStream(data_dir + 'ntnl.json'));
+request(APIBase + NtnlDocID + APIKey, status)
+	.pipe(fs.createWriteStream(DataDir + 'ntnl.json'));
 
-function status (err, msg, res) {
+function status (err) {
 	if (!err) { console.log('Done.'); }
 	else { console.log(err.msg); }
 }
