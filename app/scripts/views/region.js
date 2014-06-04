@@ -80,8 +80,9 @@ define([
 				subsidies = _.map(this.model.get('subsidies'), function (sub) {
 					if (sub.get('mode') === mode) { return sub.attributes; }
 				});
-			var CSV = Help.toCSV(subsidies);
-			window.open('data:text/csv;charset=utf-8,' + encodeURI(CSV));
+			this.$('#csv').attr('href', function () {
+				return window.URL.createObjectURL(new Blob([Help.toCSV(subsidies)], {type: 'text/csv'}));
+			});
 		},
 
 		setField: function (ev) {

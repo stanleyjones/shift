@@ -116,7 +116,7 @@ define([
 				amount: parseInt(subsidy.amountUSD, 10) || 0,
 				amountFormatted: Help.monetize(subsidy.amountUSD),
 				date: subsidy.date,
-				year: subsidy.FY, //new Date(subsidy.date).getFullYear(),
+				year: new Date(subsidy.date).getFullYear(),
 				mechanism: subsidy.mechanism,
 
 				region: subsidy.region,
@@ -145,11 +145,14 @@ define([
 			var subsidies = [],
 				multiplier = 1000000;
 			for (var year = G.START_YEAR; year < G.END_YEAR; year++) {
+				var XR = subsidy['XR' + year] ? subsidy['XR' + year] : 1,
+					amount = subsidy['amount' + year] ? parseInt(multiplier * subsidy['amount' + year] * XR, 10) : 0;
+
 				var newSubsidy = {
 					mode: 'national',
 					visible: 'true',
-					amount: parseInt(multiplier * subsidy['amount' + year] * subsidy['XR' + year], 10) || 0,
-					amountFormatted: Help.monetize(multiplier * subsidy['amount' + year] * subsidy['XR' + year]),
+					amount: amount,
+					amountFormatted: Help.monetize(amount),
 					year: year,
 
 					region: subsidy.region,

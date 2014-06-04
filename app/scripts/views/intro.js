@@ -29,9 +29,11 @@ define([
 			this.$el.html(this.template);
 		},
 
-		renderProgress: function (args) {
+		renderProgress: function () {
+			this.$('#progress').html(this.app.appState.get('status'));
 			if (this.app.isReady()) {
-				this.$el.find('.open').attr('disabled', false).text('Go');
+				this.$('.open').attr('disabled', false).text('Go');
+				this.$('#progress').delay(1000).fadeOut(500);
 			}
 		},
 

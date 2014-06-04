@@ -32,7 +32,7 @@ module.exports = function (grunt) {
 				},
 				files: [
 					'<%= yeoman.app %>/*.html',
-					'{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
+					'{.tmp,<%= yeoman.app %>}/styles/{,*/}*.{css,less}',
 					'{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
 					'<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
 					'<%= yeoman.app %>/scripts/templates/*.{ejs,mustache,hbs,html}',
@@ -141,24 +141,11 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		coffee: {
+		autoprefixer: {
 			dist: {
-				files: [{
-					expand: true,
-					cwd: '<%= yeoman.app %>/scripts',
-					src: '{,*/}*.coffee',
-					dest: '.tmp/scripts',
-					ext: '.js'
-				}]
-			},
-			test: {
-				files: [{
-					expand: true,
-					cwd: 'test/spec',
-					src: '{,*/}*.coffee',
-					dest: '.tmp/spec',
-					ext: '.js'
-				}]
+				files: {
+					'<%= yeoman.app %>/styles/main.css': '<%= yeoman.app %>/styles/main.css'
+				}
 			}
 		},
 		requirejs: {
@@ -245,6 +232,7 @@ module.exports = function (grunt) {
 						'.htaccess',
 						'images/{,*/}*.{webp,gif}',
 						'styles/fonts/{,*/}*.*',
+						'data/*.json'
 					]
 				}]
 			}
@@ -282,11 +270,6 @@ module.exports = function (grunt) {
 		grunt.file.write('.tmp/scripts/templates.js', 'this.JST = this.JST || {};');
 	});
 
-	grunt.registerTask('server', function (target) {
-		grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-		grunt.task.run(['serve:' + target]);
-	});
-
 	grunt.registerTask('serve', function (target) {
 		if (target === 'dist') {
 			return grunt.task.run(['build', 'open:server', 'connect:dist:keepalive']);
@@ -295,7 +278,6 @@ module.exports = function (grunt) {
 		if (target === 'test') {
 			return grunt.task.run([
 				'clean:server',
-				'coffee',
 				'createDefaultTemplate',
 				'jst',
 				'connect:test',
@@ -306,7 +288,6 @@ module.exports = function (grunt) {
 
 		grunt.task.run([
 			'clean:server',
-			'coffee:dist',
 			'createDefaultTemplate',
 			'jst',
 			'connect:livereload',
@@ -319,7 +300,6 @@ module.exports = function (grunt) {
 		isConnected = Boolean(isConnected);
 		var testTasks = [
 				'clean:server',
-				'coffee',
 				'createDefaultTemplate',
 				'jst',
 				'connect:test',
@@ -339,7 +319,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', [
 		'clean:dist',
 		'less',
-		'coffee',
+		'autoprefixer',
 		'createDefaultTemplate',
 		'jst',
 		'useminPrepare',
@@ -355,6 +335,7 @@ module.exports = function (grunt) {
 	]);
 
 	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-autoprefixer');
 
 	grunt.registerTask('default', [
 		'jshint',

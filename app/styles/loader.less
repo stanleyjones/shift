@@ -4,7 +4,6 @@
 	left: 0;
 	height: 100vh;
 	width: 100vw;
-	background: fade(#ccc, 75%);
 	.status-message {
 		position: absolute;
 		top: 50%;
@@ -13,15 +12,16 @@
 		text-align: center;
 		color: #fff;
 		z-index: @zindex-modal;
+		text-shadow: 0 0 5px black;
 	}
 	.status-indicator {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		height: 128px;
-		width: 128px;
-		margin-left: -64px;
-		margin-top: -64px;
+		height: 8em;
+		width: 8em;
+		margin-left: -4em;
+		margin-top: -4em;
 		border-top: 1em solid @brand-primary;
 		border-left: 1em solid fade(@brand-primary, 25%);
 		border-bottom: 1em solid fade(@brand-primary, 25%);

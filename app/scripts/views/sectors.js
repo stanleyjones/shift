@@ -20,7 +20,7 @@ define([
 
 		initialize: function () {
 			this.size = { w: $(window).width(), h: $(window).height() };
-			this.radius = Math.min(this.size.w, this.size.h - 40);
+			this.radius = Math.min(this.size.w, this.size.h - 80);
 			this.initial = {
 				zoom: 1,
 				x: d3.scale.linear().range([0, this.radius]),

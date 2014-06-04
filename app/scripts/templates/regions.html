@@ -1,6 +1,6 @@
 <div class="globe"></div>
 
-<div class="carousel-caption"><small>Above:</small> Regions of the world shaded by their clean vs. fossil fuel energy projects.</div>
+<div class="carousel-caption"><small>Above:</small> Regions of the world shaded by <% if (this.viewState.get('mode') === 'international') { %>their clean vs. fossil fuel energy projects<% } else { %>domestic subsidization of its fossil fuel industry<% } %>.</div>
 
 <% if (this.viewState.get('mode') === 'international') { %>
 	<a class="left carousel-control" href="#main" data-slide="prev" data-pane="institutions">

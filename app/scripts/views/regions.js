@@ -24,23 +24,21 @@ define([
 		},
 
 		initialize: function () {
-			this.viewState = new Backbone.Model({mode: 'international'});
-			this.listenTo(this.viewState, 'change:mode', this.render);
+			this.viewState = new Backbone.Model({
+				mode: 'international',
+				height: this.$el.height(),
+				width: this.$el.width(),
+				scale: Math.min(this.$el.height() / 2.75, this.$el.width() / 2),
+				rotate: [30, -10]
+			});
+			this.listenTo(this.viewState, 'change', this.render);
 
-			this.size = {
-				w: Math.max(640, this.$el.width()),
-				h: Math.max(640, this.$el.height())
-			};
-			this.initial = {
-				scale: this.size.h / 2.75,
-				rotate: [30,-10]
-			};
 			this.projection = d3.geo.orthographic()
-				.scale(this.initial.scale)
-				.translate([this.size.w / 2, this.size.h / 2])
+				.scale(this.viewState.get('scale'))
+				.translate([this.viewState.get('width') / 2, this.viewState.get('height') / 2])
 				.precision(0.5)
 				.clipAngle(90)
-				.rotate(this.initial.rotate);
+				.rotate(this.viewState.get('rotate'));
 			this.path = d3.geo.path().projection(this.projection);
 			this.m0 = null;
 			this.o0 = null;
@@ -52,8 +50,8 @@ define([
 			this.$el.html(this.template());
 
 			this.globe = d3.select('.globe').append('svg')
-				.attr('height', this.size.h)
-				.attr('width', this.size.w);
+				.attr('height', this.viewState.get('height'))
+				.attr('width', this.viewState.get('width'));
 
 			this.renderShadow();
 			this.renderShading();
@@ -188,8 +186,8 @@ define([
 			var _this = this;
 			d3.transition().duration(1000)
 				.tween('rotate', function () {
-					var r = d3.interpolate(_this.projection.rotate(), _this.initial.rotate),
-						z = d3.interpolate(_this.projection.scale(), _this.initial.scale);
+					var r = d3.interpolate(_this.projection.rotate(), _this.viewState.get('rotate')),
+						z = d3.interpolate(_this.projection.scale(), _this.viewState.get('scale'));
 					return function (t) {
 						_this.projection.rotate(r(t));
 						_this.projection.scale(z(t));
@@ -199,7 +197,6 @@ define([
 					_this.rotateGlobe();
 				});
 			d3.selectAll('.region').classed('active', false);
-			// this.colorRegions();
 		},
 
 		zoomRegion: function (regionPath) {
@@ -217,7 +214,7 @@ define([
 					.tween('rotate',function() {
 						var p = d3.geo.centroid(regionPath),
 						r = d3.interpolate(_this.projection.rotate(), [-p[0], -p[1] + 15]),
-						z = d3.interpolate(_this.projection.scale(), _this.size.h);
+						z = d3.interpolate(_this.projection.scale(), _this.viewState.get('height'));
 						return function (t) {
 							_this.projection.rotate(r(t));
 							_this.projection.scale(z(t));

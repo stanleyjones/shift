@@ -3,8 +3,14 @@
 
 describe('Subsidies Collection', function () {
 
-    beforeEach(function () {
-        this.SubsidiesCollection = new .Collections.Subsidies();
-    });
+	beforeEach(function () {
+		this.SubsidiesCollection = new .Collections.Subsidies();
+	});
+
+	describe('Test', function () {
+		it('should return true', function () {
+			assert.equal(true, true);
+		});
+	});
 
 });

@@ -45,8 +45,8 @@ define([
 				project: null
 			});
 			this.appState.on('change:status', this.reportStatus, this);
+			this.appState.on('change:mode', this.handlePane, this);
 			this.appState.on('change:pane', this.handlePane, this);
-			this.appState.on('change:card', this.handleCard, this);
 			this.appState.on('change:id', this.handleCard, this);
 			this.appState.on('change:project', this.handleProject, this);
 
@@ -65,7 +65,7 @@ define([
 			this.main = this.$('#main');
 			this.card = this.$('#card');
 
-			_.delay(function () { Subsidies.fetch(); }, 250);
+			_.delay(function () { Subsidies.fetch(); }, 100);
 		},
 
 // STATUS
@@ -84,19 +84,21 @@ define([
 			if (args.status === 'Ready') {
 				this.appState.set(args.collection, args.status);
 				if (args.collection === 'Subsidies') {
-					_.delay(function () { Regions.addAll(); }, 500);
+					_.delay(function () { Projects.addAll(); }, 100);
+				}
+				if (args.collection === 'Projects') {
+					_.delay(function () { Regions.addAll(); }, 100);
 				}
 				if (args.collection === 'Regions') {
 					this.regionsView = new RegionsView({collection: Regions});
-					_.delay(function () { Institutions.addAll(); }, 500);
+					_.delay(function () { Institutions.addAll(); }, 100);
 				}
 				if (args.collection === 'Institutions') {
 					this.institutionsView = new InstitutionsView({collection: Institutions});
-					_.delay(function () { Sectors.addAll(); }, 500);
+					_.delay(function () { Sectors.addAll(); }, 100);
 				}
 				if (args.collection === 'Sectors') {
 					this.sectorsView = new SectorsView({collection: Sectors});
-					_.delay(function () { Projects.addAll(); }, 500);
 				}
 			} else {
 				var status = args.status + ' ' + (args.count ? args.count + ' ' : '') + args.collection;
@@ -144,8 +146,6 @@ define([
 
 		showIntro: function() {
 			this.introView = this.introView || new IntroView({app: this});
-			// this.$('#loader').hide();
-			// this.$('#intro').show();
 		},
 
 		showStatic: function(page) {

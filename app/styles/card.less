@@ -6,7 +6,8 @@
 	height: 0;
 
 	color: white;
-	background: linear-gradient(fade(@gray-darker, 80%), @gray-darker);
+	background: linear-gradient(fade(@gray-dark, 90%), @gray-darker);
+	border-top: 1px solid @gray;
 	transition: all 0.5s;
 
 	&.open {
@@ -43,6 +44,7 @@
 		&:hover {
 			color: white;
 			background: @brand-primary;
+			text-decoration: none;
 			cursor: pointer;
 		}
 	}

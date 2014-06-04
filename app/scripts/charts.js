@@ -27,7 +27,7 @@ define([
 				field = _this.viewState.get('field'),
 				mode = _this.viewState.get('mode');
 
-			var x = d3.scale.ordinal().rangeRoundBands([0, w], 0.1),
+			var x = d3.scale.ordinal().rangeRoundBands([0, w], 0.25),
 				y = d3.scale.linear().rangeRound([h, 0]);
 
 			d3.select('.bars svg').remove();
@@ -47,21 +47,21 @@ define([
 
 			var layers = _.map(uniqFields, function (uniqField) {
 				var values = [],
-				filterSubsidies = function (year, field) {
-					return _.filter(subsidies, function (sub) {
+				filterSubs = function (subs, year, field) {
+					return _.filter(subs, function (sub) {
 						return sub.get('year') === year && sub.get(field) === uniqField;
 					});
 				},
-				reduceSubsidies = function (subsidies) {
-					return _.reduce(subsidies, function (memo, sub) {
+				reduceSubs = function (subs) {
+					return _.reduce(subs, function (memo, sub) {
 						return memo + sub.get('amount');
 					}, 0);
 				};
 				for (var year = G.START_YEAR; year <= G.END_YEAR; year++) {
-					var filteredSubsidies = filterSubsidies(year, field);
+					var filteredSubs = filterSubs(subsidies, year, field);
 					values.push({
 						x: year,
-						y: reduceSubsidies(filteredSubsidies)
+						y: reduceSubs(filteredSubs)
 					});
 				}
 				return {name: uniqField, values: values};
