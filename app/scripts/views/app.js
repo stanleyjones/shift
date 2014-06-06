@@ -205,7 +205,7 @@ define([
 			if (card === 'sector') { this.showSector(); }
 
 			this.$('#card').addClass('open');
-			this.$('#header, .carousel-control, .carousel-caption').fadeOut();
+			this.$('#header, .carousel-control, .carousel-caption, .mode-selector').fadeOut();
 		},
 
 		showRegion: function () {
@@ -238,7 +238,7 @@ define([
 
 		closeCard: function () {
 			this.$('#card').removeClass('open');
-			this.$('#header, .carousel-control, .carousel-caption').fadeIn();
+			this.$('#header, .carousel-control, .carousel-caption, .mode-selector').fadeIn();
 			this.handlePane();
 			Backbone.history.navigate(this.appState.get('pane'), {trigger: true});
 		},

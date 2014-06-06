@@ -119,9 +119,9 @@ define([
 				.attr('cy', function (d) { return d.y; })
 				.attr('r', function (d) { return d.r; })
 				.style('fill', function (d) {
-					var color = d3.scale.linear()
+					var color = d3.scale.pow().exponent(0.125)
 						.domain([-1, 1])
-						.range(['#333', '#3f3']);
+						.range(['#654', '#3f3']);
 					return d.ratio ? color(d.ratio) : '';
 				});
 
@@ -149,12 +149,12 @@ define([
 
 				zooming.selectAll('circle')
 					.attr('cx', function (d) { return x(d.x); })
-					.attr('cy', function (d) { return y(d.y); })
+					.attr('cy', function (d) { return y(d.y) - 50; })
 					.attr('r', function (d) { return zoom * d.r; });
 
 				zooming.selectAll('text')
 					.attr('x', function (d) { return x(d.x); })
-					.attr('y', function (d) { return y(d.y); })
+					.attr('y', function (d) { return y(d.y) - 50; })
 					.style('font-size', function (d2) { return d === d2 ? '48px' : 0; })
 					.style('opacity', 1);
 			}

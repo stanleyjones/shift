@@ -11,8 +11,11 @@ define([
 	var Sectors = Backbone.Collection.extend({
 		model: Sector,
 
+		comparator: 'slug',
+
 		initialize: function () {
 			// this.listenTo(Subsidies, 'reset', this.addAll);
+			this.max = 0;
 		},
 
 		addAll: function () {
@@ -30,11 +33,12 @@ define([
 			var seed = _.first(subsidies),
 				sector = new Sector({
 					name: seed.get('sector'),
-					slug: seed.get('sectorSlug'),
 					category: seed.get('category'),
+					slug: slug,
 					subsidies: subsidies
 				});
 			this.add(sector);
+			this.max = Math.max(sector.get('total'), this.max);
 		}
 
 	});

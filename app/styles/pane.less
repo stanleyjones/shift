@@ -27,20 +27,43 @@
 		background: @brand-primary;
 	}
 	.left .pane-nav {
-			left: 0;
-			transform: rotate(-90deg);
-			transform-origin: top left;
+		left: 0;
+		-webkit-transform: rotate(-90deg);
+		-webkit-transform-origin: top left;
+		transform: rotate(-90deg);
+		transform-origin: top left;
 	}
 	.right .pane-nav {
-			right: 0;
-			transform: rotate(90deg);
-			transform-origin: top right;
+		right: 0;
+		-webkit-transform: rotate(90deg);
+		-webkit-transform-origin: top right;
+		transform: rotate(90deg);
+		transform-origin: top right;
 	}
 	.carousel-caption {
 		color: black;
 		text-shadow: 0 0 1px white;
 		small {
 			text-transform: uppercase;
+		}
+	}
+	.mode-selector {
+		display: block;
+		top: 5em;
+		margin: 0 auto;
+		width: 20em;
+		.btn {
+			width: 10em;
+			border: 1px solid @gray-light;
+			color: @gray-light;
+			background: transparent;
+			&.active {
+				color: white;
+				box-shadow: none;
+			}
+			&:hover {
+				background: fade(@gray, 50%);
+			}
 		}
 	}
 }

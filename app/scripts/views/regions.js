@@ -138,7 +138,7 @@ define([
 			if (this.viewState.get('mode') === 'international') {
 				color = d3.scale.linear()
 					.domain([-1, 0, 1])
-					.range(['#333', '#ccc', '#3f3']);
+					.range(['#654', '#ccc', '#3f3']);
 				value = region.get('ratio');
 			}
 			if (this.viewState.get('mode') === 'national') {

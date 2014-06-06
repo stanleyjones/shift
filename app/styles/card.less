@@ -23,8 +23,8 @@
 		width: 2em;
 		font-size: @font-size-large;
 		opacity: 1;
-		color: #333;
-		background: white;
+		color: white;
+		background: @gray-darker;
 		border: 0;
 		border-radius: 50%;
 		&.close {
@@ -67,6 +67,20 @@
 					text-anchor: right;
 					font-size: 10px;
 					font-weight: 100;
+				}
+			}
+		}
+		.fields {
+			.btn {
+				border: 1px solid @gray-light;
+				color: @gray-light;
+				background: transparent;
+				&.active {
+					color: white;
+					box-shadow: none;
+				}
+				&:hover {
+					background: fade(@gray, 50%);
 				}
 			}
 		}

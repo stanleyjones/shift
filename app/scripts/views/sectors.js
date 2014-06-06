@@ -40,6 +40,7 @@ define([
 		},
 
 		setupGraph: function () {
+			var _this = this;
 			this.graph = d3.select('#sectors .graph').append('svg')
 				.attr('height', this.size.h)
 				.attr('width', this.size.w)
@@ -49,15 +50,23 @@ define([
 			var flat = _.map(this.collection.models, function (i) { return i.toJSON(); }),
 				grouped = { name: 'sectors', children: [] };
 			_.each(flat, function (sector) {
-				grouped.children.push({
-					name: sector.name,
-					slug: sector.slug,
-					value: sector.total,
-					category: sector.category
-				});
+				if (sector.total > 0) {
+					grouped.children.push({
+						name: sector.name,
+						slug: sector.slug,
+						value: sector.total,
+						category: sector.category
+					});
+				}
 			});
 			this.nodes = d3.layout.pack()
 				.size([this.radius, this.radius])
+				.value(function (d) {
+					var radius = d3.scale.linear()
+						.domain([0, _this.collection.max])
+						.range([20, 10000]);
+					return radius(d.value);
+				})
 				.padding(2)
 				.nodes(grouped);
 
@@ -155,12 +164,12 @@ define([
 
 				zooming.selectAll('circle')
 					.attr('cx', function (d) { return x(d.x); })
-					.attr('cy', function (d) { return y(d.y); })
+					.attr('cy', function (d) { return y(d.y) - 50; })
 					.attr('r', function (d) { return zoom * d.r; });
 
 				zooming.selectAll('text')
 					.attr('x', function (d) { return x(d.x); })
-					.attr('y', function (d) { return y(d.y); })
+					.attr('y', function (d) { return y(d.y) - 50; })
 					.style('font-size', function (d2) { return d === d2 ? '48px' : 0; })
 					.style('opacity', 1);
 			}

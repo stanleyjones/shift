@@ -56,7 +56,7 @@ define([
 
 		uniqFields: function (field, mode) {
 			var subsidies = this.filterSubsidies(mode);
-			return _.uniq(_.map(subsidies, function (s) { return s.get(field); }));
+			return _.uniq(_.map(subsidies, function (s) { return s.get(field); }).sort(), true);
 		},
 
 		filterSubsidies: function (mode) {

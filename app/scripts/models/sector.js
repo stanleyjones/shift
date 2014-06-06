@@ -23,17 +23,18 @@ define([
 			this.set({slug: Help.slugify(this.get('name'))});
 		},
 
-		calcTotal: function () {
+		calcTotal: function (options) {
+			var mode = (options && options.mode) ? options.mode : 'international';
+
 			var total = _.reduce(this.get('subsidies'), function (memo, s) {
-				return memo + s.get('amount');
+				var amount = (s.get('mode') === mode) ? s.get('amount') : 0;
+				return memo + amount;
 			}, 0);
 			this.set({total: total, totalFormatted: Help.monetize(total)});
 		},
 
 		uniqFields: function (field) {
-			return _.uniq(_.map(this.get('subsidies'), function (sub) {
-				return sub.get(field);
-			}));
+			return _.uniq(_.map(this.get('subsidies'), function (s) { return s.get(field); }).sort(), true);
 		}
 	});
 

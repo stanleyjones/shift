@@ -9,7 +9,7 @@ describe('Subsidies Collection', function () {
 
 	describe('Test', function () {
 		it('should return true', function () {
-			assert.equal(true, true);
+			assert.equal(true, false);
 		});
 	});
 

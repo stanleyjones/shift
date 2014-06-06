@@ -29,27 +29,33 @@ define([
 			this.set({slug: Help.slugify(slug)});
 		},
 
-		calcTotal: function () {
+		calcTotal: function (options) {
+			var mode = (options && options.mode) ? options.mode : 'international';
+
 			var total = _.reduce(this.get('subsidies'), function (memo, s) {
-				return memo + s.get('amount');
+				var amount = (s.get('mode') === mode) ? s.get('amount') : 0;
+				return memo + amount;
 			}, 0);
 			this.set({total: total});
 		},
 
-		calcRatio: function () {
-			var amounts = {clean: 0, fossilFuel: 0, total: 0};
+
+		calcRatio: function (options) {
+			var mode = (options && options.mode) ? options.mode : 'international',
+				amounts = {clean: 0, fossilFuel: 0, total: 0};
+
 			_.each(this.get('subsidies'), function (s) {
-				if (s.get('category') === 'clean') { amounts.clean += s.get('amount'); }
-				if (s.get('category') === 'fossil-fuel') { amounts.fossilFuel += s.get('amount'); }
-				amounts.total += s.get('amount');
+				if (s.get('mode') === mode) {
+					if (s.get('category') === 'clean') { amounts.clean += s.get('amount'); }
+					if (s.get('category') === 'fossil-fuel') { amounts.fossilFuel += s.get('amount'); }
+					amounts.total += s.get('amount');
+				}
 			});
 			if (amounts.total) { this.set({ratio: ((amounts.clean - amounts.fossilFuel) / amounts.total).toFixed(2)}); }
 		},
 
 		uniqFields: function (field) {
-			return _.uniq(_.map(this.get('subsidies'), function (sub) {
-				return sub.get(field);
-			}));
+			return _.uniq(_.map(this.get('subsidies'), function (s) { return s.get(field); }).sort(), true);
 		}
 
 	});

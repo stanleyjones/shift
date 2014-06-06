@@ -12,6 +12,7 @@ define([
 
 	var Subsidies = Backbone.Collection.extend({
 		model: Subsidy,
+		comparator: 'date',
 
 		localStorage: new Store(G.APP_NAME),
 
@@ -190,6 +191,10 @@ define([
 
 		forProject: function (slug) {
 			return this.where({projectSlug: slug});
+		},
+
+		byMode: function (mode) {
+			return this.where({mode: mode});
 		}
 
 	});

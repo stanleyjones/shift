@@ -15,8 +15,7 @@ define([
 		template: _.template(introTemplate),
 
 		events: {
-			'click .select-national .open': 'loadNational',
-			'click .select-international .open': 'loadInternational'
+			'click .enter': 'enterRegions'
 		},
 
 		initialize: function (options) {
@@ -32,17 +31,12 @@ define([
 		renderProgress: function () {
 			this.$('#progress').html(this.app.appState.get('status'));
 			if (this.app.isReady()) {
-				this.$('.open').attr('disabled', false).text('Go');
-				this.$('#progress').delay(1000).fadeOut(500);
+				this.$('.enter').attr('disabled', false).text('Enter');
 			}
 		},
 
-		loadNational: function () {
-			Backbone.history.navigate('regions/national', {trigger: true});
-		},
-
-		loadInternational: function () {
-			Backbone.history.navigate('regions/international', {trigger: true});
+		enterRegions: function () {
+			Backbone.history.navigate('regions', {trigger: true});
 		}
 	});
 

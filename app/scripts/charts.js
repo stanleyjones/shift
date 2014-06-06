@@ -91,12 +91,12 @@ define([
 			y.domain([0, d3.max(stacked[stacked.length - 1].values, function (d) {
 				return d.y0 + d.y;
 			})]);
-		
+
 			var stacks = chart.selectAll('g.stack')
 				.data(stacked)
 				.enter().append('g')
 				.attr('class', function (d) { return 'stack ' + Help.slugify(d.name); });
-		
+
 			var bars = stacks.selectAll('rect')
 				.data(function (d) { return d.values; });
 
@@ -112,7 +112,7 @@ define([
 				.duration(500)
 				.attr('y', function(d) { return Math.max(0, y(d.y0) - (h - y(d.y))); })
 				.attr('height', function(d) { return Math.max(0, h - y(d.y)); });
-		
+
 			bars.exit().transition()
 				.duration(500)
 				.attr('height', 0)

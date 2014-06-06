@@ -5,7 +5,6 @@
 	}
 	.bubble {
 		stroke-width: 1;
-		// fill: @gray-light;
 		cursor: pointer;
 		&.group {
 			fill: rgba(255,255,255,0.25);
@@ -14,6 +13,10 @@
 			stroke: #f96;
 			stroke-width: 2;
 			stroke-opacity: 1;
+		}
+		&.group:hover {
+			stroke-opacity: 0;
+			cursor: default;
 		}
 	}
 	.label {
