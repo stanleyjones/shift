@@ -63,6 +63,7 @@ define([
 			$.when.apply(null, promises).then(function () {
 
 				_.each(cache, function (json, mode) {
+					var modeCount = 0;
 
 					// Parse Google's weird JSON into a better format
 					var parsedJSON = _this.parseJSON(json);
@@ -75,12 +76,13 @@ define([
 							if (subsidy.isValid()) {
 								_this.add(subsidy);
 								subsidy.save();
+								modeCount++;
 							} else {
-								// console.log(subsidy.validationError);
+								console.log(subsidy.validationError);
 							}
 						});
 					});
-
+					console.log(mode + ': ' + modeCount);
 				});
 				_this.trigger('change:status', {collection: 'Subsidies', status: 'Adding', count: _this.models.length});
 				_this.reset(_this.models);
@@ -120,8 +122,9 @@ define([
 				year: new Date(subsidy.date).getFullYear(),
 				mechanism: subsidy.mechanism,
 
-				region: subsidy.region,
-				regionCC: subsidy.regionCC,
+				region: subsidy.country,
+				regionCC: subsidy.CC,
+				geoRegion: subsidy.region,
 
 				sector: subsidy.sector,
 				sectorSlug: Help.slugify(subsidy.sector),
