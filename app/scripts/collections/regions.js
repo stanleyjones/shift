@@ -10,10 +10,11 @@ define([
 
 	var Regions = Backbone.Collection.extend({
 		model: Region,
+		comparator: 'cc',
 
 		initialize: function () {
 			// this.listenTo(Subsidies, 'reset', this.addAll);
-			this.range = {min: 0, max: 0};
+			this.max = 0;
 		},
 
 		addAll: function () {
@@ -35,10 +36,7 @@ define([
 					subsidies: subsidies
 				});
 			this.add(region);
-			this.range = {
-				min: Math.min(region.get('total'), this.range.min),
-				max: Math.max(region.get('total'), this.range.max)
-			};
+			if (region.get('total') > this.max) { this.max = region.get('total'); }
 		}
 
 	});

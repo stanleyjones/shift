@@ -138,7 +138,7 @@ define([
 				.delay(function (d, i) { return i * 25; })
 				.attr('x', function (d) { return d.x; })
 				.attr('y', function (d) { return d.children ? d.y - d.r : d.y; })
-				.style('font-size', function (d) { return d.children ? '1em' : (2 * d.r / (d.abbr ? d.abbr.length : d.name.length)); })
+				.style('font-size', function (d) { return d.children ? '1em' : (2 * d.r / (d.abbr ? d.abbr.length : d.name.length)) + 'px'; })
 				.style('opacity', function (d) { return d.r > 15 ? 1 : 0; });
 
 			// resetting.selectAll('.icon')

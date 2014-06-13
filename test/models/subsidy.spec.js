@@ -1,10 +1,20 @@
-/*global beforeEach, describe, it, assert, expect  */
+/*global define, beforeEach, describe, it, expect  */
 'use strict';
 
-describe('Subsidy Model', function () {
+define(function(require) {
+	var SubsidyModel = require('scripts/models/subsidy.js');
 
-    beforeEach(function () {
-        this.SubsidyModel = new .Models.Subsidy();
-    });
+	describe('Subsidy Model', function () {
+
+		beforeEach(function () {
+			this.SubsidyModel = new SubsidyModel();
+		});
+
+		describe('Test', function () {
+			it('should return true', function () {
+				expect(true).to.be.equal(true);
+			});
+		});
+	});
 
 });

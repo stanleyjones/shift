@@ -45,7 +45,7 @@ define([
 			if (attrs.amount <= 0) {
 				return 'Subsidy must have a positive amount.';
 			}
-			if (attrs.year === false) {
+			if (!attrs.year) {
 				return 'Subsidy must have a year.';
 			}
 			if (attrs.year < G.START_YEAR || attrs.year > G.END_YEAR) {

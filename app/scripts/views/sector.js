@@ -86,6 +86,7 @@ define([
 		toggleView: function () {
 			var view = (this.viewState.get('view') === 'chart') ? 'table' : 'chart';
 			this.viewState.set({view: view});
+			$('.handle.toggle').text(view);
 			$('.view-' + view).show().siblings('.view').hide();
 			this.table.columns.adjust().draw();
 		}

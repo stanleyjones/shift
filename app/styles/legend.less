@@ -3,6 +3,7 @@
 @other:			#ccc;
 @stage:			#36f;
 @institution:	#63f;
+@region:		#f63;
 
 // CATEGORIES
 
@@ -12,59 +13,79 @@
 
 // SECTORS
 
-.bioenergy,
-.biofuels,
-.biomass		{ fill: spin(@clean, -30); &:before { background-color: spin(@clean, -30); } }
-.efficiency		{ fill: spin(@clean, -20); &:before { background-color: spin(@clean, -20); } }
-.geothermal		{ fill: spin(@clean, -10); &:before { background-color: spin(@clean, -10); } }
-.hydro-small	{ fill: spin(@clean, 0); &:before { background-color: spin(@clean, 0); } }
-.renewables		{ fill: spin(@clean, 10); &:before { background-color: spin(@clean, 10); } }
-.solar			{ fill: spin(@clean, 20); &:before { background-color: spin(@clean, 20); } }
-.wind			{ fill: spin(@clean, 30); &:before { background-color: spin(@clean, 30); } }
+.coal 						{fill: spin(@fossil, 0); &:before { background-color: spin(@fossil, 0); } }
+.efficiency-fossil 			{fill: spin(@fossil, 10); &:before { background-color: spin(@fossil, 10); } }
+.gas 						{fill: spin(@fossil, 20); &:before { background-color: spin(@fossil, 20); } }
+.hydro-large 				{fill: spin(@fossil, 30); &:before { background-color: spin(@fossil, 30); } }
+.incineration 				{fill: spin(@fossil, 40); &:before { background-color: spin(@fossil, 40); } }
+.mixed-or-unclear-fossil	{fill: spin(@fossil, 50); &:before { background-color: spin(@fossil, 50); } }
+.natural-gas 				{fill: spin(@fossil, 60); &:before { background-color: spin(@fossil, 60); } }
+.oil 						{fill: spin(@fossil, 70); &:before { background-color: spin(@fossil, 70); } }
+.oil-and-gas, .oil-gas		{fill: spin(@fossil, 80); &:before { background-color: spin(@fossil, 80); } }
 
-.charcoal			{ fill: spin(@fossil, -40); &:before { background-color: spin(@fossil, -40); } }
-.coal				{ fill: spin(@fossil, -30); &:before { background-color: spin(@fossil, -30); } }
-.coal-bed-methane	{ fill: spin(@fossil, -20); &:before { background-color: spin(@fossil, -20); } }
-.cooking-fuels		{ fill: spin(@fossil, -10); &:before { background-color: spin(@fossil, -10); } }
-.natural-gas,
-.gas				{ fill: spin(@fossil, 0); &:before { background-color: spin(@fossil, 0); } }
-.gas-flaring-reduction	{ fill: spin(@fossil, 10); &:before { background-color: spin(@fossil, 10); } }
-.hydro-large		{ fill: spin(@fossil, 20); &:before { background-color: spin(@fossil, 20); } }
-.incineration		{ fill: spin(@fossil, 30); &:before { background-color: spin(@fossil, 30); } }
-.oil				{ fill: spin(@fossil, 40); &:before { background-color: spin(@fossil, 40); } }
-.oil-and-gas		{ fill: spin(@fossil, 50); &:before { background-color: spin(@fossil, 50); } }
+.biofuels					{fill: spin(@clean, 0); &:before { background-color: spin(@clean, 0); } }
+.biomass					{fill: spin(@clean, 10); &:before { background-color: spin(@clean, 10); } }
+.efficiency-clean			{fill: spin(@clean, 20); &:before { background-color: spin(@clean, 20); } }
+.geothermal					{fill: spin(@clean, 30); &:before { background-color: spin(@clean, 30); } }
+.hydro-small				{fill: spin(@clean, 40); &:before { background-color: spin(@clean, 40); } }
+.mixed-or-unclear-clean		{fill: spin(@clean, 50); &:before { background-color: spin(@clean, 50); } }
+.renewables-clean			{fill: spin(@clean, 60); &:before { background-color: spin(@clean, 60); } }
+.solar						{fill: spin(@clean, 70); &:before { background-color: spin(@clean, 70); } }
+.wind						{fill: spin(@clean, 80); &:before { background-color: spin(@clean, 80); } }
 
-.mixed,
-.mixed-or-unspecified	{ fill: @other; &:before { background-color: @other; } }
-.nuclear				{ fill: @other; &:before { background-color: @other; } }
+.efficiency-other			{fill: spin(@other, 0); &:before { background-color: spin(@other, 0); } }
+.mixed-or-unclear-other		{fill: spin(@other, 10); &:before { background-color: spin(@other, 10); } }
+.nuclear					{fill: spin(@other, 20); &:before { background-color: spin(@other, 20); } }
+.renewables-other			{fill: spin(@other, 30); &:before { background-color: spin(@other, 30); } }
 
 // STAGES
 
-.consumption			{ fill: spin(@stage, -40); &:before { background-color: spin(@stage, -40); } }
-.exploration			{ fill: spin(@stage, -30); &:before { background-color: spin(@stage, -30); } }
-.extraction				{ fill: spin(@stage, -20); &:before { background-color: spin(@stage, -20); } }
-.mixed,
-.mixed-or-unspecified	{ fill: spin(@stage, -10); &:before { background-color: spin(@stage, -10); } }
-.point-of-use			{ fill: spin(@stage, 0); &:before { background-color: spin(@stage, 0); } }
-.power-production,
-.production				{ fill: spin(@stage, 10); &:before { background-color: spin(@stage, 10); } }
-.transmission-and-distribution,
-.transmission			{ fill: spin(@stage, 20); &:before { background-color: spin(@stage, 20); } }
-.transportation			{ fill: spin(@stage, 30); &:before { background-color: spin(@stage, 30); } }
+.consumption				{ fill: spin(@stage, 0); &:before { background-color: spin(@stage, 0); } }
+.electricity-production,
+.production 				{ fill: spin(@stage, 10); &:before { background-color: spin(@stage, 10); } }
+.exploration-clean			{ fill: spin(@stage, 20); &:before { background-color: spin(@stage, 20); } }
+.exploration-fossil,
+.exploration 				{ fill: spin(@stage, 30); &:before { background-color: spin(@stage, 30); } }
+.extraction					{ fill: spin(@stage, 40); &:before { background-color: spin(@stage, 40); } }
+.flaring-reduction			{ fill: spin(@stage, 50); &:before { background-color: spin(@stage, 50); } }
+.heating					{ fill: spin(@stage, 60); &:before { background-color: spin(@stage, 60); } }
+.point-of-use				{ fill: spin(@stage, 70); &:before { background-color: spin(@stage, 70); } }
+.transmission-distribution 	{ fill: spin(@stage, 80); &:before { background-color: spin(@stage, 80); } }
+.transportation				{ fill: spin(@stage, 90); &:before { background-color: spin(@stage, 90); } }
+.unclear-or-mixed			{ fill: spin(@stage, 100); &:before { background-color: spin(@stage, 100); } }
 
-// INSTITUTIONS
+// INSTITUTION GROUPS
 
-.african-development-bank 								{ fill: spin(@institution, 0); &:before { background-color: spin(@institution, 0); } }
-.asian-development-bank 								{ fill: spin(@institution, 10); &:before { background-color: spin(@institution, 10); } }
-.european-bank-for-reconstruction-and-development 		{ fill: spin(@institution, 20); &:before { background-color: spin(@institution, 20); } }
-.european-investment-bank 								{ fill: spin(@institution, 30); &:before { background-color: spin(@institution, 30); } }
-.inter-american-development-bank 						{ fill: spin(@institution, 40); &:before { background-color: spin(@institution, 40); } }
-.international-bank-for-reconstruction-and-development 	{ fill: spin(@institution, 50); &:before { background-color: spin(@institution, 50); } }
-.international-development-association 					{ fill: spin(@institution, 60); &:before { background-color: spin(@institution, 60); } }
-.international-finance-corporation 						{ fill: spin(@institution, 70); &:before { background-color: spin(@institution, 70); } }
-.japan-international-cooperation-agency 				{ fill: spin(@institution, 80); &:before { background-color: spin(@institution, 80); } }
-.multilateral-investment-guarantee-agency 				{ fill: spin(@institution, 90); &:before { background-color: spin(@institution, 90); } }
+.world-bank-group									{ fill: spin(@institution, 0); &:before { background-color: spin(@institution, 0); } }
+.african-development-bank							{ fill: spin(@institution, 10); &:before { background-color: spin(@institution, 10); } }
+.asian-development-bank								{ fill: spin(@institution, 20); &:before { background-color: spin(@institution, 20); } }
+.inter-american-development-bank					{ fill: spin(@institution, 30); &:before { background-color: spin(@institution, 30); } }
+.european-bank-for-reconstruction-and-development	{ fill: spin(@institution, 40); &:before { background-color: spin(@institution, 40); } }
+.european-investment-bank							{ fill: spin(@institution, 50); &:before { background-color: spin(@institution, 50); } }
+.united-states										{ fill: spin(@institution, 60); &:before { background-color: spin(@institution, 60); } }
+.china												{ fill: spin(@institution, 70); &:before { background-color: spin(@institution, 70); } }
+.france												{ fill: spin(@institution, 80); &:before { background-color: spin(@institution, 80); } }
+.germany											{ fill: spin(@institution, 90); &:before { background-color: spin(@institution, 90); } }
+.japan 												{ fill: spin(@institution, 100); &:before { background-color: spin(@institution, 100); } }
+.korea												{ fill: spin(@institution, 110); &:before { background-color: spin(@institution, 110); } }
+.netherlands										{ fill: spin(@institution, 120); &:before { background-color: spin(@institution, 120); } }
+.nordic-countries									{ fill: spin(@institution, 130); &:before { background-color: spin(@institution, 130); } }
+.russian-federation									{ fill: spin(@institution, 140); &:before { background-color: spin(@institution, 140); } }
+.united-kingdom										{ fill: spin(@institution, 150); &:before { background-color: spin(@institution, 150); } }
+.unaffiliated										{ fill: desaturate(@institution, 50%); &:before { background-color: desaturate(@institution, 50%); } }
 
+// REGIONS
+
+.central-western-europe			{ fill: spin(@region, 0);  &:before { background-color: spin(@region, 0); } }
+.east-asia-pacific				{ fill: spin(@region, 10); &:before { background-color: spin(@region, 10); } }
+.eastern-europe-central-asia	{ fill: spin(@region, 20); &:before { background-color: spin(@region, 20); } }
+.global							{ fill: spin(@region, 30); &:before { background-color: spin(@region, 30); } }
+.latin-america-caribbean		{ fill: spin(@region, 40); &:before { background-color: spin(@region, 40); } }
+.middle-east-north-africa 		{ fill: spin(@region, 50); &:before { background-color: spin(@region, 50); } }
+.middle-east-and-north-africa	{ fill: spin(@region, 60); &:before { background-color: spin(@region, 60); } }
+.north-america					{ fill: spin(@region, 70); &:before { background-color: spin(@region, 70); } }
+.south-asia						{ fill: spin(@region, 80); &:before { background-color: spin(@region, 80); } }
+.sub-saharan-africa				{ fill: spin(@region, 90); &:before { background-color: spin(@region, 90); } }
 
 // HIGHLIGHT
 

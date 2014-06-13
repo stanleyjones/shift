@@ -102,7 +102,7 @@ define([
 
 			bars.enter()
 				.append('rect')
-				.attr('x', function(d) { return 2 * margin + x(d.x); })
+				.attr('x', function (d) { return 2 * margin + x(d.x); })
 				.attr('y', h)
 				.attr('height', 0)
 				.attr('width', x.rangeBand());

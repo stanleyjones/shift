@@ -21,6 +21,7 @@ define([
 			this.on('reset', function () {
 				this.trigger('change:status', {collection: 'Subsidies', status: 'Ready'});
 			});
+			this.progress = { pending: 0, done: 0 };
 		},
 
 		parse: function (res) {
@@ -45,6 +46,17 @@ define([
 			return now > expires;
 		},
 
+		updateStatus: function () {
+			if (this.progress.pending === this.progress.done) { // Ready!
+				this.trigger('change:status', {collection: 'Subsidies', status: 'Adding', count: this.models.length});
+				this.reset(this.models);
+				this.setExpiry();
+			} else {
+				var progress = Math.round(100 * this.progress.done / this.progress.pending);
+				this.trigger('change:status', {collection: 'Subsidies', status: 'Updated ' + progress + '%'});
+			}
+		},
+
 		emptyLocalStorage: function () {
 			var m;
 			while (m) { m.destroy(); m = _.first(this.models); }
@@ -52,44 +64,44 @@ define([
 
 		fetchCache: function () {
 			var _this = this,
-				cache = {};
+				cache = [];
 
 			var promises = _.map(G.DATACACHES, function (src) {
-				return $.getJSON(src.url).done(function (json) { cache[src.mode] = json; });
+				return $.getJSON(src.url)
+					.always(function () { _this.progress.pending++; })
+					.done(function (json) { cache.push({mode: src.mode, parsed: _this.parseJSON(json)}); })
+					.fail(function (err) { console.log('Error: ' + err); });
 			});
 
 			this.emptyLocalStorage();
 
 			$.when.apply(null, promises).then(function () {
 
-				_.each(cache, function (json, mode) {
-					var modeCount = 0;
+				_.each(cache, function (json) {
+					var mode = json.mode,
+						parsedJSON = json.parsed,
+						count = 0;
 
-					// Parse Google's weird JSON into a better format
-					var parsedJSON = _this.parseJSON(json);
+					_.delay(function () {
 
 					// Process JSON into Subsidies
-					_.each(parsedJSON, function (raw) {
-						var subsidies = _this.process(raw, mode);
-						if (!Array.isArray(subsidies)) { subsidies = new Array(subsidies); }
-						_.each(subsidies, function (subsidy) {
-							if (subsidy.isValid()) {
-								_this.add(subsidy);
-								subsidy.save();
-								modeCount++;
-							} else {
-								console.log(subsidy.validationError);
-							}
+						_.each(parsedJSON, function (raw) {
+							var subsidies = _this.process(raw, mode);
+							if (!Array.isArray(subsidies)) { subsidies = new Array(subsidies); }
+							_.each(subsidies, function (subsidy) {
+								if (subsidy.isValid()) {
+									_this.add(subsidy);
+									// subsidy.save(); // Disabled until we can fix localStorage issues
+									count++;
+								} else {
+									// console.log(subsidy.validationError);
+								}
+							});
 						});
-					});
-					console.log(mode + ': ' + modeCount);
+						_this.progress.done++;
+						_this.updateStatus();
+					}, 100);
 				});
-				_this.trigger('change:status', {collection: 'Subsidies', status: 'Adding', count: _this.models.length});
-				_this.reset(_this.models);
-				_this.setExpiry();
-			})
-			.fail(function (req, status, err) {
-				_this.trigger('change:status', {collection: 'Subsidies', status: 'Failed: ' + err.message});
 			});
 		},
 
@@ -116,10 +128,10 @@ define([
 				mode: 'international',
 
 				visible: subsidy.visible,
-				amount: parseInt(subsidy.amountUSD, 10) || 0,
+				amount: parseInt(subsidy.amountUSD, 10),
 				amountFormatted: Help.monetize(subsidy.amountUSD),
 				date: subsidy.date,
-				year: new Date(subsidy.date).getFullYear(),
+				year: parseInt(subsidy.FY, 10), //new Date(subsidy.date).getFullYear(),
 				mechanism: subsidy.mechanism,
 
 				region: subsidy.country,
@@ -140,7 +152,7 @@ define([
 
 				institution: subsidy.institution,
 				institutionAbbr: subsidy.institutionAbbr,
-				institutionGroup: subsidy.institutionGroup
+				institutionGroup: subsidy.institutionGroup || 'Unaffiliated'
 			};
 			return new Subsidy(newSubsidy);
 		},
@@ -150,7 +162,7 @@ define([
 				multiplier = 1000000;
 			for (var year = G.START_YEAR; year < G.END_YEAR; year++) {
 				var XR = subsidy['XR' + year] ? subsidy['XR' + year] : 1,
-					amount = subsidy['amount' + year] ? parseInt(multiplier * subsidy['amount' + year] * XR, 10) : 0;
+					amount = (subsidy['amount' + year] && subsidy['amount' + year] !== 'NaN') ? parseInt(multiplier * subsidy['amount' + year] * XR, 10) : 0;
 
 				var newSubsidy = {
 					mode: 'national',
@@ -179,6 +191,8 @@ define([
 			}
 			return subsidies;
 		},
+
+		// Filters
 
 		inRegion: function (cc) {
 			return this.where({regionCC: cc});

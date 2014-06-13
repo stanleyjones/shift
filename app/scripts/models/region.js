@@ -45,7 +45,7 @@ define([
 			_.each(this.get('subsidies'), function (s) {
 				if (s.get('mode') === mode) { total += s.get('amount'); }
 			});
-			this.set({total: total});
+			this.set({total: parseInt(total, 10)});
 		},
 
 		setVisibility: function (mode) {

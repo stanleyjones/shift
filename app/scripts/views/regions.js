@@ -143,7 +143,7 @@ define([
 			}
 			if (this.viewState.get('mode') === 'national') {
 				color = d3.scale.pow().exponent(0.5)
-					.domain([this.collection.range.min, this.collection.range.max])
+					.domain([0, this.collection.max])
 					.range(['#cc9', '#333']);
 				value = region.get('total');
 			}

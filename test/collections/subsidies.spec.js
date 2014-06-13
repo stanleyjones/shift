@@ -1,15 +1,19 @@
 /*global beforeEach, describe, it, assert, expect  */
 'use strict';
 
-describe('Subsidies Collection', function () {
+define(function(require) {
+	var SubsidiesCollection = require('scripts/collections/subsidies.js');
 
-	beforeEach(function () {
-		this.SubsidiesCollection = new .Collections.Subsidies();
-	});
+	describe('Subsidies Collection', function () {
 
-	describe('Test', function () {
-		it('should return true', function () {
-			assert.equal(true, false);
+		beforeEach(function () {
+			// this.SubsidiesCollection = new SubsidiesCollection();
+		});
+
+		describe('Test', function () {
+			it('should return true', function () {
+				expect(true).to.be.equal(true);
+			});
 		});
 	});
 

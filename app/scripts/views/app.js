@@ -84,20 +84,25 @@ define([
 			if (args.status === 'Ready') {
 				this.appState.set(args.collection, args.status);
 				if (args.collection === 'Subsidies') {
+					// console.log(Subsidies);
 					_.delay(function () { Projects.addAll(); }, 100);
 				}
 				if (args.collection === 'Projects') {
+					// console.log(Projects);
 					_.delay(function () { Regions.addAll(); }, 100);
 				}
 				if (args.collection === 'Regions') {
+					// console.log(Regions);
 					this.regionsView = new RegionsView({collection: Regions});
 					_.delay(function () { Institutions.addAll(); }, 100);
 				}
 				if (args.collection === 'Institutions') {
+					// console.log(Institutions);
 					this.institutionsView = new InstitutionsView({collection: Institutions});
 					_.delay(function () { Sectors.addAll(); }, 100);
 				}
 				if (args.collection === 'Sectors') {
+					// console.log(Sectors);
 					this.sectorsView = new SectorsView({collection: Sectors});
 				}
 			} else {

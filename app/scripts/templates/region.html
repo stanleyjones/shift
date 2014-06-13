@@ -1,16 +1,16 @@
-<button class="handle toggle">/</button>
+<button class="handle toggle">chart</button>
 <button class="handle close">&times;</button>
 
 <div class="container">
 	<h2><%= name %> <a id="csv" download="<%= name %>Subsidies.csv" class="label label-default csv-link">CSV</a></h2>
-	
+
 	<div class="view view-chart row">
 		<div class="bars col-sm-8"></div>
 		<div class="col-sm-4">
 			<div class="fields btn-group">
 				<button type="button" class="btn btn-default" data-field="sector">Sector</button>
 				<button type="button" class="btn btn-default" data-field="stage">Stage</button>
-				<% if (mode === 'international') { %><button type="button" class="btn btn-default" data-field="institution">Institution</button><% } %>
+				<% if (mode === 'international') { %><button type="button" class="btn btn-default" data-field="institutionGroup">Institution</button><% } %>
 			</div>
 			<div class="legend"></div>
 		</div>

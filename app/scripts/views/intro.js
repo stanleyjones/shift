@@ -15,7 +15,8 @@ define([
 		template: _.template(introTemplate),
 
 		events: {
-			'click .enter': 'enterRegions'
+			'click .enter': 'enterRegions',
+			'click .notice': 'enterStatic'
 		},
 
 		initialize: function (options) {
@@ -37,6 +38,11 @@ define([
 
 		enterRegions: function () {
 			Backbone.history.navigate('regions', {trigger: true});
+		},
+
+		enterStatic: function () {
+			var page = $('.notice').data('page');
+			Backbone.history.navigate(page, {trigger: true});
 		}
 	});
 
