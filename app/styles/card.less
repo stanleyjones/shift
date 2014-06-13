@@ -10,6 +10,16 @@
 	border-top: 1px solid @gray;
 	transition: all 0.5s;
 
+	::-webkit-scrollbar {
+		-webkit-appearance: none;
+		width: 7px;
+	}
+	::-webkit-scrollbar-thumb {
+		border-radius: 4px;
+		background-color: rgba(0, 0, 0, .5);
+		-webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+	}
+
 	&.open {
 		height: 50vh;
 		.handle { display: block; }
@@ -58,9 +68,8 @@
 		.bars {
 			height: 100%;
 			.stack {
-				stroke: #fff;
+				transition: fill 0.5s;
 				stroke-width: 0;
-				stroke-opacity: 0.5;
 			}
 			.axis {
 				fill: none;
@@ -96,10 +105,14 @@
 			list-style: none;
 			li {
 				text-overflow: ellipsis;
+				margin-bottom: 1px;
 				white-space: nowrap;
 				overflow: hidden;
 				padding: .25em .35em;
 				height: 2em;
+				background-color: @gray-darker;
+				border-radius: 1em;
+				transition: all 0.5s;
 				&:before {
 					display: inline-block;
 					margin-right: .5em;
@@ -111,7 +124,6 @@
 				&:hover {
 					color: white;
 					background-color: #666;
-					border-radius: 1em;
 					&:before {
 						background-color: @brand-primary;
 					}

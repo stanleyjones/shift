@@ -152,7 +152,7 @@ define([
 
 				institution: subsidy.institution,
 				institutionAbbr: subsidy.institutionAbbr,
-				institutionGroup: subsidy.institutionGroup || 'Unaffiliated'
+				institutionGroup: subsidy.institutionGroup || 'Regional Development Banks'
 			};
 			return new Subsidy(newSubsidy);
 		},

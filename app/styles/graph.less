@@ -1,5 +1,5 @@
 .graph {
-	.root, #unaffiliated {
+	.root {
 		opacity: 0;
 		fill: transparent;
 	}
@@ -23,5 +23,8 @@
 		fill: #fff;
 		font-weight: 200;
 		pointer-events: none;
+		&.solo {
+			opacity: 0 !important;
+		}
 	}
 }

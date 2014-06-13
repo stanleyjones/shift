@@ -100,7 +100,16 @@ define([
 			this.graph.selectAll('text')
 				.data(this.nodes)
 				.enter().append('text')
-					.attr('class', function (d) { return d.parent ? (d.children ? 'label group' : 'label') : 'root'; })
+					.attr('class', function (d) {
+						if (!d.parent) { return 'root'; }
+
+						var classed = 'label';
+						if (d.children) {
+							if (d.children.length > 1) { classed += ' group'; }
+							else { classed += ' solo'; }
+						}
+						return classed;
+					})
 					.attr('x', function () { return _this.size.w / 2; })
 					.attr('y', function () { return _this.size.h / 2; })
 					.attr('dy', function (d) { return d.children ? '-.35em' : '.35em'; })
@@ -130,7 +139,7 @@ define([
 				.attr('x', function (d) { return d.x; })
 				.attr('y', function (d) { return d.children ? d.y - d.r : d.y; })
 				.style('font-size', function (d) { return d.children ? '1em' : (2 * d.r / (d.abbr ? d.abbr.length : d.name.length)) + 'px'; })
-				.style('opacity', function (d) { return (d.r > 15 && d.name !== 'Unaffiliated') ? 1 : 0; });
+				.style('opacity', function (d) { return d.r > 15 ? 1 : 0; });
 		},
 
 		zoomInstitution: function (d) {

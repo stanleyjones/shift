@@ -19,6 +19,19 @@
 		text-indent: 200%;
 		white-space: nowrap;
 	}
+	.navbar-title {
+		float: left;
+  		padding: @navbar-padding-vertical @navbar-padding-horizontal;
+  		font-size: @font-size-large;
+  		font-family: @font-family-sans-serif;
+  		line-height: @line-height-computed;
+  		height: @navbar-height;
+  		color: fade(@brand-primary, 75%);
+  		&:hover {
+  			color: @brand-primary;
+  			text-decoration: none;
+  		}
+	}
 	.navbar-toggle {
 		color: #666;
 		background: #222;
@@ -34,12 +47,18 @@
 		border: 0;
 	}
 	#oilchange-links a {
-		padding-left: 0;
-		color: #666;
+		padding: 1.25em;
+		color: darken(@brand-primary, 25%);
 		font-size: 12px;
 		font-weight: 200;
+		background: @gray-darker;
+		border-right: 1px solid darken(@gray-darker, 5%);
 		&:hover {
-			color: #fff;
+			color: @brand-primary;
+			background: black;
 		}
 	}
+}
+@media screen and (max-width: 390px) {
+	.navbar-brand { display: none; }
 }

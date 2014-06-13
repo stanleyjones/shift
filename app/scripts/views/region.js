@@ -70,16 +70,18 @@ define([
 				scrollCollapse: true,
 				paging: false,
 				searching: false,
-				info: false
+				info: false,
+				order: [[0, 'desc']]
 			});
 			this.table.columns.adjust().draw();
 		},
 
 		downloadCSV: function () {
 			var mode = this.viewState.get('mode'),
-				subsidies = _.map(this.model.get('subsidies'), function (sub) {
-					if (sub.get('mode') === mode) { return sub.attributes; }
-				});
+				subsidies = _.chain(this.model.get('subsidies'))
+					.filter(function (sub) { return sub.get('mode') === mode; })
+					.map(function (sub) { return sub.attributes; })
+					.value();
 			this.$('#csv').attr('href', function () {
 				return window.URL.createObjectURL(new Blob([Help.toCSV(subsidies)], {type: 'text/csv'}));
 			});

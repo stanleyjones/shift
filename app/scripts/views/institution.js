@@ -51,7 +51,7 @@ define([
 
 			var legend = '';
 			_.each(legendFields, function (field) {
-				legend += '<li class="' + Help.slugify(field) + '">' + field + '</li>';
+				legend += '<li class="' + Help.slugify(field) + '"><span>' + field + '</span></li>';
 			});
 
 			this.$('.legend').html(legend);
@@ -64,9 +64,19 @@ define([
 				scrollCollapse: true,
 				paging: false,
 				searching: false,
-				info: false
+				info: false,
+				order: [[0, 'desc']]
 			});
 			this.table.columns.adjust().draw();
+		},
+
+		downloadCSV: function () {
+			var subsidies = _.chain(this.model.get('subsidies'))
+					.map(function (sub) { return sub.attributes; })
+					.value();
+			this.$('#csv').attr('href', function () {
+				return window.URL.createObjectURL(new Blob([Help.toCSV(subsidies)], {type: 'text/csv'}));
+			});
 		},
 
 		setField: function (ev) {
