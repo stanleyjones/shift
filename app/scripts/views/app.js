@@ -205,6 +205,12 @@ define([
 
 		showCard: function () {
 			var card = this.appState.get('card');
+			if (this.cardView) { // Already showing card
+				this.$('#card').removeClass('open');
+				this.cardView.remove(); // Remove zombie view
+				this.$('#main').after('<aside id="card"></aside>');
+			}
+
 			if (card === 'region') { this.showRegion(); }
 			if (card === 'institution') { this.showInstitution(); }
 			if (card === 'sector') { this.showSector(); }
@@ -218,7 +224,7 @@ define([
 				mode = this.appState.get('mode'),
 				region = Regions.findWhere({cc: cc});
 			if (region) {
-				new RegionView({model: region, mode: mode});
+				this.cardView = new RegionView({model: region, mode: mode});
 				this.regionsView.highlight(cc);
 			}
 		},
@@ -227,7 +233,7 @@ define([
 			var slug = this.appState.get('id'),
 				institution = Institutions.findWhere({slug: slug});
 			if (institution) {
-				new InstitutionView({model: institution});
+				this.cardView = new InstitutionView({model: institution});
 				this.institutionsView.highlight(slug);
 			}
 		},
@@ -236,7 +242,7 @@ define([
 			var slug = this.appState.get('id'),
 				sector = Sectors.findWhere({slug: slug});
 			if (sector) {
-				new SectorView({model: sector});
+				this.cardView = new SectorView({model: sector});
 				this.sectorsView.highlight(slug);
 			}
 		},
