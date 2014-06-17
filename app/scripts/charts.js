@@ -25,7 +25,7 @@ define([
 				w = size.w - margin * 2,
 				h = size.h - margin,
 				field = _this.viewState.get('field'),
-				mode = _this.viewState.get('mode');
+				mode = _this.viewState.get('mode') || 'international';
 
 			var x = d3.scale.ordinal().rangeRoundBands([0, w], 0.25),
 				y = d3.scale.linear().rangeRound([h, 0]);
@@ -49,7 +49,7 @@ define([
 				var values = [],
 				filterSubs = function (subs, year, field) {
 					return _.filter(subs, function (sub) {
-						return sub.get('year') === year && sub.get(field) === uniqField;
+						return sub.get('mode') === mode && sub.get('year') === year && sub.get(field) === uniqField;
 					});
 				},
 				reduceSubs = function (subs) {
