@@ -232,14 +232,17 @@ define([
 		},
 
 		grab: function (ev) {
+			var ev0 = ev.touches ? ev.touches[0] : ev;
+			console.log('X:', ev0.pageX, 'Y:', ev0.pageY);
 			this.rotateGlobe('stop');
-			this.m0 = [ev.pageX, ev.pageY];
+			this.m0 = [ev0.pageX, ev0.pageY];
 			this.o0 = this.projection.rotate();
 		},
 
 		drag: function (ev) {
+			var ev0 = ev.touches ? ev.touches[0] : ev;
 			if (this.m0) {
-				var m1 = [ev.pageX, ev.pageY],
+				var m1 = [ev0.pageX, ev0.pageY],
 					o1 = [this.o0[0] + (m1[0] - this.m0[0]) / 6, this.o0[1] + (this.m0[1] - m1[1]) / 6];
 				this.projection.rotate(o1);
 				this.refreshGlobe();
