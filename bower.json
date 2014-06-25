@@ -1,6 +1,6 @@
 {
-  "name": "shift-the-subsidies",
-  "version": "0.0.0",
+  "name": "shift",
+  "version": "3.0.0",
   "dependencies": {
     "jquery": "~1.9.0",
     "underscore": "~1.4.3",
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "mocha": "~1.20.1",
-    "chai": "~1.9.1"
+    "chai": "~1.9.1",
+    "velocity": "~0.2.1"
   }
 }
