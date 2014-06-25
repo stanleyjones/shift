@@ -28,7 +28,7 @@ define([
 				mode: 'international',
 				height: this.$el.height(),
 				width: this.$el.width(),
-				scale: Math.min(this.$el.height() / 2.75, this.$el.width() / 2),
+				scale: Math.min(this.$el.height() / 2.75, this.$el.width() / 2.25),
 				rotate: [30, -10]
 			});
 			this.listenTo(this.viewState, 'change', this.render);
@@ -42,6 +42,8 @@ define([
 			this.path = d3.geo.path().projection(this.projection);
 			this.m0 = null;
 			this.o0 = null;
+
+			$(window).bind('resize', _.bind(this.resize, this));
 
 			this.render();
 		},
@@ -62,6 +64,17 @@ define([
 			this.colorRegions();
 
 			return this;
+		},
+
+		resize: function () {
+			var height = $(window).height(),
+				width = $(window).width();
+			this.projection.translate([width / 2, height / 2]);
+			this.viewState.set({
+				height: height,
+				width: width,
+				scale: Math.min(height / 2.75, width / 2.25)
+			}); // triggers render
 		},
 
 		renderRegions: function () {

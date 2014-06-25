@@ -8,16 +8,17 @@
 	position: absolute;
 	height: 100vh;
 	background: linear-gradient(#666, #fff);
+	overflow: hidden;
+	overflow-y: scroll;
 
 	.pane-nav {
 		position: absolute;
-		top: 50%;
-		min-width: 8em;
-		margin-top: 4em;
+		bottom: 0;
+		min-width: 7em;
+		max-width: 150px;
 		padding: 0 1em;
 		line-height: 3;
 		border: 0;
-		border-radius: 0 0 1em 1em;
 		color: white;
 		font-weight: 200;
 		background: black;
@@ -28,32 +29,32 @@
 	}
 	.left .pane-nav {
 		left: 0;
-		-webkit-transform: rotate(-90deg);
-		-webkit-transform-origin: top left;
-		transform: rotate(-90deg);
-		transform-origin: top left;
+		border-radius: 0 1em 1em 0;
 	}
 	.right .pane-nav {
 		right: 0;
-		-webkit-transform: rotate(90deg);
-		-webkit-transform-origin: top right;
-		transform: rotate(90deg);
-		transform-origin: top right;
+		border-radius: 1em 0 0 1em;
 	}
 	.carousel-caption {
+		position: static;
+		margin: 0 0 3em;
+		padding: 1em;
 		color: black;
 		text-shadow: 0 0 1px white;
+		font-size: @font-size-small;
 		small {
 			text-transform: uppercase;
 		}
 	}
 	.mode-selector {
 		display: block;
-		top: 5em;
+		top: 4em;
 		margin: 0 auto;
 		width: 20em;
+		max-width: 300px;
 		.btn {
 			width: 10em;
+			max-width: 150px;
 			border: 1px solid @gray-light;
 			color: @gray-light;
 			background: transparent;
@@ -64,6 +65,33 @@
 			&:hover {
 				background: fade(@gray, 50%);
 			}
+		}
+	}
+}
+@media screen and (min-width: @screen-sm) {
+	.pane {
+		overflow-y: hidden;
+		.pane-nav {
+			bottom: 50%;
+			margin-bottom: -6em;
+		}
+		.left .pane-nav {
+			-webkit-transform: rotate(-90deg);
+			-webkit-transform-origin: top left;
+			transform: rotate(-90deg);
+			transform-origin: top left;
+			border-radius: 0 0 1em 1em;
+		}
+		.right .pane-nav {
+			-webkit-transform: rotate(90deg);
+			-webkit-transform-origin: top right;
+			transform: rotate(90deg);
+			transform-origin: top right;
+			border-radius: 0 0 1em 1em;
+		}
+		.carousel-caption {
+			position: absolute;
+			margin: 0 0 1em;
 		}
 	}
 }

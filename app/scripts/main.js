@@ -35,7 +35,8 @@ require.config({
 		d3: '../bower_components/d3/d3',
 		topojson: '../bower_components/topojson/topojson',
 		bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
-		datatables: '../bower_components/DataTables/media/js/jquery.dataTables'
+		datatables: '../bower_components/DataTables/media/js/jquery.dataTables',
+		velocity: '../bower_components/velocity/jquery.velocity'
 	}
 });
 

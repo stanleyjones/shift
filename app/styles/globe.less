@@ -1,7 +1,10 @@
 .globe {
-	min-height: 640px;
+
 	cursor: move;
-	
+
+	svg {
+		margin-top: -1em;
+	}
 	.graticule {
 		fill: none;
 		stroke: #fff;
@@ -28,5 +31,10 @@
 		&.active {
 			fill: #f96;
 		}
+	}
+}
+@media screen and (min-width: @screen-sm) {
+	.globe {
+		svg {margin-top: 0;}
 	}
 }

@@ -5,6 +5,7 @@ define([
 	'underscore',
 	'backbone',
 	'bootstrap',
+	'velocity',
 	'routes/router',
 	'collections/subsidies',
 	'collections/projects',
@@ -21,7 +22,7 @@ define([
 	'views/sectors',
 	'views/sector',
 	'views/project'
-], function ($, _, Backbone, Bootstrap, Router, Subsidies, Projects, Regions, Institutions, Sectors, LoaderView, IntroView, StaticView, RegionsView, RegionView, InstitutionsView, InstitutionView, SectorsView, SectorView, ProjectView) {
+], function ($, _, Backbone, Bootstrap, Velocity, Router, Subsidies, Projects, Regions, Institutions, Sectors, LoaderView, IntroView, StaticView, RegionsView, RegionView, InstitutionsView, InstitutionView, SectorsView, SectorView, ProjectView) {
 	'use strict';
 
 	var AppView = Backbone.View.extend({
@@ -127,7 +128,7 @@ define([
 		},
 
 		fire: function () {
-			this.$('#loader').addClass('ready').delay(1000).fadeOut();
+			this.$('#loader').addClass('ready');
 			this.handlePane();
 			this.handleCard();
 		},
@@ -155,15 +156,15 @@ define([
 
 		showStatic: function(page) {
 			this.staticView = new StaticView({page: page});
-			this.$('#static').slideDown();
+			this.$('#static').velocity({height: '100vh'}, {display: 'block'});
 		},
 
 		closeStatic: function() {
-			this.$('#static').slideUp();
+			this.$('#static').velocity({height: 0}, {display: 'none'});
 		},
 
 		showPane: function () {
-			this.$('#intro').fadeOut();
+			this.$('#intro').velocity({opacity: 0}, {duration: 2000, display: 'none'});
 			var pane = this.appState.get('pane');
 			this.$('#' + pane).addClass('active').siblings().removeClass('active');
 

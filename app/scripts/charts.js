@@ -15,7 +15,7 @@ define([
 		barchart: function (view) {
 			var _this = view,
 				size = {
-					h: _this.$('.bars').height(),
+					h: Math.max(_this.$('.bars').height(), $(window).height() * 0.4),
 					w: _this.$('.bars').width()
 				};
 
