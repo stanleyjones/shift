@@ -246,7 +246,7 @@ define([
 
 		grab: function (ev) {
 			var ev0 = ev.touches ? ev.touches[0] : ev;
-			console.log('X:', ev0.pageX, 'Y:', ev0.pageY);
+			// console.log('X:', ev0.pageX, 'Y:', ev0.pageY);
 			this.rotateGlobe('stop');
 			this.m0 = [ev0.pageX, ev0.pageY];
 			this.o0 = this.projection.rotate();

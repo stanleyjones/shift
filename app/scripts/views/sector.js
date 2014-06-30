@@ -22,7 +22,8 @@ define([
 			'click .handle.toggle': 'toggleView',
 			'click .fields .btn': 'setField',
 			'mouseenter .legend li': 'highlight',
-			'mouseleave .legend li': 'unhighlight'
+			'mouseleave .legend li': 'unhighlight',
+			'click .csv-link': 'downloadCSV'
 		},
 
 		initialize: function () {

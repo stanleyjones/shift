@@ -72,12 +72,12 @@ define([
 // STATUS
 
 		reportStatus: function () {
-			var status = this.appState.get('status'),
-				timerStart = this.timer || new Date(),
-				timerStop = new Date(),
-				elapsed = ((timerStop - timerStart) / 1000).toFixed(2) + 's';
-			this.timer = timerStart;
-			console.log(elapsed, status);
+			var status = this.appState.get('status');
+				// timerStart = this.timer || new Date(),
+				// timerStop = new Date();
+				// elapsed = ((timerStop - timerStart) / 1000).toFixed(2) + 's',
+			// this.timer = timerStart;
+			// console.log(elapsed, status);
 			this.loader.viewState.set({status: status});
 		},
 
