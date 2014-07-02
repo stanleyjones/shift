@@ -5,7 +5,7 @@ var request = require('request'),
 
 	APIBase = 'https://www.googleapis.com/fusiontables/v1/query?sql=SELECT * FROM ',
 	APIQuery = ' WHERE visible LIKE \'true\'',
-	APIChunkSize = 300, // Should be at least 20% of total Intl subsidies
+	APIChunkSize = 300, // Should be at least 10% of total Intl subsidies
 	APIKey = '&key=AIzaSyAxIxiJR_hGp8eoCsadSvloPYwbEaaGYDo',
 
 	IntlDocID = '1pDDzy5h4foOxCrS7VoUGELh0EPaS9VyaGTKfgd-e',
@@ -19,7 +19,7 @@ function status (err) {
 }
 
 console.log('Downloading international subsidies...');
-for (var i = 0; i < 10; i++) { // Slice into 5 files
+for (var i = 0; i < 10; i++) { // Slice into 10 files
 	var APIChunk = ' OFFSET ' + (i * APIChunkSize) + ' LIMIT ' + APIChunkSize;
 	request(APIBase + IntlDocID + APIQuery + APIChunk + APIKey, status)
 		.pipe(fs.createWriteStream(DataDir + 'intl' + i + '.json'));
