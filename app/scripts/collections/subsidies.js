@@ -159,10 +159,11 @@ define([
 
 		processNtnl: function (subsidy) {
 			var subsidies = [],
-				multiplier = 1000000;
-			for (var year = G.START_YEAR; year < G.END_YEAR; year++) {
-				var XR = subsidy['XR' + year] ? subsidy['XR' + year] : 1,
-					amount = (subsidy['amount' + year] && subsidy['amount' + year] !== 'NaN') ? parseInt(multiplier * subsidy['amount' + year] * XR, 10) : 0;
+				mult = 1000000;
+			for (var year = G.START_YEAR; year <= G.END_YEAR; year++) {
+				var XR = !isNaN(subsidy['XR' + year]) ? parseFloat(subsidy['XR' + year]) : 1,
+					rawAmount = subsidy['amount' + year],
+					amount = !isNaN(rawAmount) ? parseFloat(rawAmount * XR * mult) : 0;
 
 				var newSubsidy = {
 					mode: 'national',
