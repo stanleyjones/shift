@@ -24,6 +24,10 @@ require.config({
 		datatables: {
 			deps: ['jquery'],
 			exports: 'DataTables'
+		},
+		velocity: {
+			deps: ['jquery'],
+			exports: 'Velocity'
 		}
 	},
 	paths: {
