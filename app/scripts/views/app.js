@@ -6,6 +6,7 @@ define([
 	'backbone',
 	'bootstrap',
 	'velocity',
+	'helpers',
 	'routes/router',
 	'collections/subsidies',
 	'collections/projects',
@@ -22,7 +23,7 @@ define([
 	'views/sectors',
 	'views/sector',
 	'views/project'
-], function ($, _, Backbone, Bootstrap, Velocity, Router, Subsidies, Projects, Regions, Institutions, Sectors, LoaderView, IntroView, StaticView, RegionsView, RegionView, InstitutionsView, InstitutionView, SectorsView, SectorView, ProjectView) {
+], function ($, _, Backbone, Bootstrap, Velocity, Help, Router, Subsidies, Projects, Regions, Institutions, Sectors, LoaderView, IntroView, StaticView, RegionsView, RegionView, InstitutionsView, InstitutionView, SectorsView, SectorView, ProjectView) {
 	'use strict';
 
 	var AppView = Backbone.View.extend({
@@ -107,7 +108,9 @@ define([
 					this.sectorsView = new SectorsView({collection: Sectors});
 				}
 			} else {
-				var status = args.status + ' ' + (args.count ? args.count + ' ' : '') + args.collection;
+				var status;
+				if (args.total) { status = 'Counting Subsidies<br>$' + Help.suffix(args.total); }
+				else { status = args.status + ' ' + (args.count ? args.count + ' ' : '') + args.collection; }
 				this.appState.set({status: status});
 			}
 			if (

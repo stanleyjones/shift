@@ -13,7 +13,7 @@
 
 // SECTORS
 
-.coal 						{fill: spin(@fossil, 0); &:before { background-color: spin(@fossil, 0); } }
+.coal 						{fill: spin(@fossil,  0); &:before { background-color: spin(@fossil,  0); } }
 .efficiency-fossil 			{fill: spin(@fossil, 10); &:before { background-color: spin(@fossil, 10); } }
 .gas 						{fill: spin(@fossil, 20); &:before { background-color: spin(@fossil, 20); } }
 .hydro-large 				{fill: spin(@fossil, 30); &:before { background-color: spin(@fossil, 30); } }
@@ -23,7 +23,7 @@
 .oil 						{fill: spin(@fossil, 70); &:before { background-color: spin(@fossil, 70); } }
 .oil-and-gas, .oil-gas		{fill: spin(@fossil, 80); &:before { background-color: spin(@fossil, 80); } }
 
-.biofuels					{fill: spin(@clean, 0); &:before { background-color: spin(@clean, 0); } }
+.biofuels					{fill: spin(@clean,  0); &:before { background-color: spin(@clean,  0); } }
 .biomass					{fill: spin(@clean, 10); &:before { background-color: spin(@clean, 10); } }
 .efficiency-clean			{fill: spin(@clean, 20); &:before { background-color: spin(@clean, 20); } }
 .geothermal					{fill: spin(@clean, 30); &:before { background-color: spin(@clean, 30); } }
@@ -32,11 +32,15 @@
 .renewables-clean			{fill: spin(@clean, 60); &:before { background-color: spin(@clean, 60); } }
 .solar						{fill: spin(@clean, 70); &:before { background-color: spin(@clean, 70); } }
 .wind						{fill: spin(@clean, 80); &:before { background-color: spin(@clean, 80); } }
+.wind-and-solar				{fill: spin(@clean, 90); &:before { background-color: spin(@clean, 80); } }
 
-.efficiency-other			{fill: spin(@other, 0); &:before { background-color: spin(@other, 0); } }
+.climate					{fill: spin(@other,-10); &:before { background-color: spin(@other,-10); } }
+.efficiency-other			{fill: spin(@other,  0); &:before { background-color: spin(@other,  0); } }
 .mixed-or-unclear-other		{fill: spin(@other, 10); &:before { background-color: spin(@other, 10); } }
 .nuclear					{fill: spin(@other, 20); &:before { background-color: spin(@other, 20); } }
 .renewables-other			{fill: spin(@other, 30); &:before { background-color: spin(@other, 30); } }
+.renewables-and-efficiency-other
+							{fill: spin(@other, 40); &:before { background-color: spin(@other, 40); } }
 
 // STAGES
 

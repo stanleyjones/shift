@@ -22,6 +22,7 @@ define([
 				this.trigger('change:status', {collection: 'Subsidies', status: 'Ready'});
 			});
 			this.progress = { pending: 0, done: 0 };
+			this.total = 0;
 		},
 
 		parse: function (res) {
@@ -48,12 +49,12 @@ define([
 
 		updateStatus: function () {
 			if (this.progress.pending === this.progress.done) { // Ready!
-				this.trigger('change:status', {collection: 'Subsidies', status: 'Adding', count: this.models.length});
+				// this.trigger('change:status', {collection: 'Subsidies', status: 'Adding', count: this.models.length});
 				this.reset(this.models);
 				this.setExpiry();
 			} else {
 				var progress = Math.round(100 * this.progress.done / this.progress.pending);
-				this.trigger('change:status', {collection: 'Subsidies', status: 'Updated ' + progress + '%'});
+				this.trigger('change:status', {collection: 'Subsidies', status: 'Updated ' + progress + '%', total: this.total});
 			}
 		},
 
@@ -91,6 +92,7 @@ define([
 							_.each(subsidies, function (subsidy) {
 								if (subsidy.isValid()) {
 									_this.add(subsidy);
+									_this.total += subsidy.get('amount');
 									// subsidy.save(); // Disabled until we can fix localStorage issues
 									count++;
 								} else {

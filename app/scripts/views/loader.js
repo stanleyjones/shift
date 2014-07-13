@@ -10,9 +10,11 @@ define([
 
 	var LoaderView = Backbone.View.extend({
 		el: '#loader',
-				
+
 		initialize: function () {
-			this.viewState = new Backbone.Model({status: 'Initialized'});
+			this.viewState = new Backbone.Model({
+				status: 'Initialized'
+			});
 			this.viewState.on('change:status', this.render, this);
 		},
 
