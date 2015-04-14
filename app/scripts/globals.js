@@ -23,7 +23,7 @@ define('globals', function () {
 		],
 
 		START_YEAR: 2008,
-		END_YEAR: 2013
+		END_YEAR: 2014
 	};
 
 	return globals;

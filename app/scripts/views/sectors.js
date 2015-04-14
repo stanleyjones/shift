@@ -109,14 +109,14 @@ define([
 					.style('font-size', '0')
 					.text(function (d) { return d.abbr || d.name; });
 
-			// var icons = this.graph.selectAll('.icon')
-			// 	.data(this.nodes)
-			// 	.enter().append('circle')
-			// 		.attr('class', 'icon')
-			// 		.attr('cx', function (d) { return _this.size.w / 2; })
-			// 		.attr('cy', function (d) { return _this.size.h / 2; })
-			// 		.attr('r', 0)
-			// 		.style('fill', 'url(#dftIcon)');
+			var icons = this.graph.selectAll('.icon')
+				.data(this.nodes)
+				.enter().append('circle')
+		       	    	        .attr('class', 'icon')
+					.attr('cx', function (d) { return _this.size.w / 2; })
+		         		.attr('cy', function (d) { return _this.size.h / 2; })
+			 		.attr('r', 0)
+			 		.style('fill', 'url(#dftIcon)');
 		},
 
 		resetGraph: function () {
